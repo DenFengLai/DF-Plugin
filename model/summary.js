@@ -1,5 +1,4 @@
-import fetch from "node-fetch"
-import { Config } from "#components"
+import { Config, request } from "#components"
 import _ from "lodash"
 
 let Sum
@@ -34,7 +33,7 @@ export default new class Summary {
     if (lock) return
     lock = true
     try {
-      Sum = await (await fetch(Config.summary.api)).text() || Sum
+      Sum = await request.get(Config.summary.api, { responseType: "text", log: false }) || Sum
     } catch (err) {
       logger.error(`获取一言接口时发生错误：${err}`)
     } finally {

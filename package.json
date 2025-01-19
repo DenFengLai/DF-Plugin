@@ -21,6 +21,7 @@
   "author": "DengFengLai",
   "license": "MIT",
   "dependencies": {
+    "https-proxy-agent": "7.0.6",
     "marked": "^14.1.4",
     "ulid": "^2.3.0"
   },

@@ -1,8 +1,7 @@
-import fetch from "node-fetch"
 import { imagePoke as RandomFace } from "#model"
-import { Config, Poke_List as Face_List } from "#components"
+import { Config, Poke_List as Face_List, request } from "#components"
 
-export class Random_Picturs extends plugin {
+export class Random_Pictures extends plugin {
   constructor() {
     super({
       name: "DF:随机图片",
@@ -11,24 +10,16 @@ export class Random_Picturs extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#?来张([jJ][kK]|制服(小姐姐)?)?$",
-          fnc: "jk"
-        },
-        {
-          reg: "^#?来张黑丝$",
-          fnc: "hs"
-        },
-        {
-          reg: "^#?来张[Cc][Oo][Ss]$",
-          fnc: "cos"
-        },
-        {
-          reg: "^#?(看看|来张)腿子?$",
-          fnc: "kkt"
+          reg: "^#?(来张|看看|随机)([jJ][kK]|制服(小姐姐)?|黑丝|[Cc][Oo][Ss]|腿子?)?$",
+          fnc: "handleRequest"
         },
         {
           reg: `^#?(随机|来张)?(${Face_List.join("|")})$`,
-          fnc: "Face"
+          fnc: "handleRequest"
+        },
+        {
+          reg: "^#?[Dd][Ff]随机表情包?列表$",
+          fnc: "list"
         }
       ]
     })
@@ -38,47 +29,38 @@ export class Random_Picturs extends plugin {
     return Config.Picture.open
   }
 
-  async jk(e) {
-    if (!this.open) return false
-    return e.reply(segment.image("https://api.suyanw.cn/api/jk.php"), true)
+  async list(e) {
+    return e.reply(`表情包列表：\n${Face_List.join("、")}`, true)
   }
 
-  async hs(e) {
+  async handleRequest(e) {
     if (!this.open) return false
-    return e.reply([
-      "唉嗨害，黑丝来咯",
-      segment.image("https://api.suyanw.cn/api/hs.php")
-    ], true)
-  }
 
-  async cos(e) {
-    if (!this.open) return false
-    const resp = await fetch("https://api.suyanw.cn/api/cos.php?type=json")
-    const data = await resp.json()
-    const links = data.text.replace(/\\/g, "/")
-    return e.reply([
-      "cos来咯~",
-      segment.image(links)
-    ], true)
-  }
+    const msg = e.msg
+    let response = []
 
-  async kkt(e) {
-    if (!this.open) return false
-    const resp = await fetch("https://api.suyanw.cn/api/meitui.php")
-    const data = await resp.text()
-    const links = data.match(/https?:\/\/[^ ]+/g)
-    return e.reply([
-      "看吧涩批！",
-      segment.image(`${links}`)
-    ], true)
-  }
+    if (msg.includes("jk") || msg.includes("制服")) {
+      response = [ segment.image("https://api.suyanw.cn/api/jk.php") ]
+    } else if (msg.includes("黑丝")) {
+      response = [ "唉嗨害，黑丝来咯", segment.image("https://api.suyanw.cn/api/hs.php") ]
+    } else if (msg.includes("cos")) {
+      const link = (await request.get("https://api.suyanw.cn/api/cos.php?type=json")).text.replace(/\\/g, "/")
+      response = [ "cos来咯~", segment.image(link) ]
+    } else if (msg.includes("腿子") || msg.includes("看看")) {
+      const link = (await request.get("https://api.suyanw.cn/api/meitui.php", { responseType: "text" })).match(/https?:\/\/[^ ]+/)?.[0]
+      response = [ "看吧涩批！", segment.image(link) ]
+    } else if (msg.includes("随机") || msg.includes("来张") || Config.Picture.Direct) {
+      const name = msg.replace(/#|随机|来张/g, "")
+      const file = RandomFace(name)
+      if (file) {
+        response = [ segment.image(file) ]
+      }
+    }
 
-  async Face(e) {
-    if (!this.open) return false
-    if (!(e.msg.includes("随机") || e.msg.includes("来张") || Config.Picture.Direct)) return false
-    const name = e.msg.replace(/#|随机|来张/g, "")
-    const file = RandomFace(name)
-    if (!file) return false
-    return e.reply(segment.image(file))
+    if (response.length > 0) {
+      return e.reply(response, true)
+    }
+
+    return false
   }
 }

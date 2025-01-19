@@ -4,6 +4,7 @@ import Poke from "./Poke.js"
 import other from "./other.js"
 import sendMaster from "./SendMaster.js"
 import summary from "./Summary.js"
+import proxy from "./proxy.js"
 import { Config } from "#components"
 
 export const schemas = [
@@ -12,17 +13,16 @@ export const schemas = [
   CodeUpdata,
   Picture,
   summary,
+  proxy,
   other
 ].flat()
 
 export function getConfigData() {
-  return {
-    other: Config.other,
-    sendMaster: Config.sendMaster,
-    CodeUpdate: Config.CodeUpdate,
-    summary: Config.summary,
-    Picture: Config.Picture
-  }
+  const configKeys = [ "other", "sendMaster", "CodeUpdate", "summary", "Picture", "proxy" ]
+  return configKeys.reduce((acc, key) => {
+    acc[key] = Config[key]
+    return acc
+  }, {})
 }
 
 export async function setConfigData(data, { Result }) {

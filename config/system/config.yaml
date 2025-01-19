@@ -152,3 +152,12 @@ summary:
   apiTips: |-
     一言接口
   api: "https://v1.hitokoto.cn/?encode=text"
+
+proxy:
+  openTips: |-
+    是否代理大部分请求
+  open: false
+
+  urlTips: |-
+    代理地址
+  url: "http://127.0.0.1:7890"

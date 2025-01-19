@@ -1,4 +1,4 @@
-import fs from "node:fs"
+import fs from "node:fs/promises"
 import path from "node:path"
 import { exec } from "child_process"
 import { Path } from "#components"
@@ -36,14 +36,15 @@ async function PluginDirs() {
  * @returns {Promise<object>} result - 获取到的插件路径
  */
 async function traverseDirectories(dir, result = { github: [], gitee: [] }) {
-  const items = fs.readdirSync(dir)
-  const promises = items.map(async(item) => {
-    try {
+  try {
+    const items = await fs.readdir(dir)
+    const promises = items.map(async(item) => {
       if (item === "data" || item === "node_modules") return
 
       const itemPath = path.join(dir, item)
-      if (fs.statSync(itemPath).isDirectory()) {
-        if (isGitRepo(itemPath)) {
+      const stat = await fs.stat(itemPath)
+      if (stat.isDirectory()) {
+        if (await isGitRepo(itemPath)) {
           const branch = await getRemoteBranch(itemPath)
           const remoteUrl = await getRemoteUrl(itemPath, branch)
           if (remoteUrl) classifyRepo(remoteUrl, branch, result)
@@ -51,22 +52,27 @@ async function traverseDirectories(dir, result = { github: [], gitee: [] }) {
           await traverseDirectories(itemPath, result)
         }
       }
-    } catch (err) {
-      console.error(`无法读取目录: ${dir}/${item}`, err)
-    }
-  })
-  await Promise.all(promises)
+    })
+    await Promise.all(promises)
+  } catch (err) {
+    console.error(`无法读取目录: ${dir}`, err)
+  }
   return result
 }
 
 /**
  * 检查是否为 Git 仓库
  * @param {string} dir - 检查的目录路径
- * @returns {boolean} 是否为 Git 仓库
+ * @returns {Promise<boolean>} 是否为 Git 仓库
  */
-function isGitRepo(dir) {
+async function isGitRepo(dir) {
   const gitDir = path.join(dir, ".git")
-  return fs.existsSync(gitDir)
+  try {
+    await fs.access(gitDir)
+    return true
+  } catch {
+    return false
+  }
 }
 
 /**
@@ -85,7 +91,7 @@ async function getRemoteUrl(repoPath, branch) {
  * @param {string} branch - 分支名称
  * @returns {Promise<string>} 当前分支名称
  */
-function getRemoteName(repoPath, branch) {
+async function getRemoteName(repoPath, branch) {
   return executeCommand(`git config branch.${branch}.remote`, repoPath)
 }
 
@@ -94,7 +100,7 @@ function getRemoteName(repoPath, branch) {
  * @param {string} repoPath - 仓库路径
  * @returns {Promise<string>} 当前分支名称
  */
-function getRemoteBranch(repoPath) {
+async function getRemoteBranch(repoPath) {
   return executeCommand("git branch --show-current", repoPath)
 }
 

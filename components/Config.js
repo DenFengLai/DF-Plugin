@@ -75,6 +75,11 @@ export class Config {
     return this.config.Picture
   }
 
+  /** 代理配置 */
+  get proxy() {
+    return this.config.proxy
+  }
+
   /**
    * 群配置
    * @param group_id

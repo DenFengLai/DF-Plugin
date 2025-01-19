@@ -1,4 +1,4 @@
-import fetch from "node-fetch"
+import { request } from "#components"
 
 export default new class {
   /**
@@ -52,9 +52,9 @@ export default new class {
    */
   async fetchData(url, headers = {}, repo, source) {
     try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers
+      const response = await request.get(url, {
+        headers,
+        responseType: "raw"
       })
 
       if (!response.ok) {
