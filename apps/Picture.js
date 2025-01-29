@@ -10,7 +10,7 @@ export class Random_Pictures extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#?(来张|看看|随机)([jJ][kK]|制服(小姐姐)?|黑丝|[Cc][Oo][Ss]|腿子?)?$",
+          reg: "^#?(来张|看看|随机)([jJ][kK]|制服(小姐姐)?|黑丝|[Cc][Oo][Ss]|腿子?)$",
           fnc: "handleRequest"
         },
         {
@@ -18,7 +18,7 @@ export class Random_Pictures extends plugin {
           fnc: "handleRequest"
         },
         {
-          reg: "^#?[Dd][Ff]随机表情包?列表$",
+          reg: "^#?[Dd][Ff](随机)?表情包?列表$",
           fnc: "list"
         }
       ]
@@ -46,7 +46,7 @@ export class Random_Pictures extends plugin {
     } else if (msg.includes("cos")) {
       const link = (await request.get("https://api.suyanw.cn/api/cos.php?type=json")).text.replace(/\\/g, "/")
       response = [ "cos来咯~", segment.image(link) ]
-    } else if (msg.includes("腿子") || msg.includes("看看")) {
+    } else if (msg.includes("腿")) {
       const link = (await request.get("https://api.suyanw.cn/api/meitui.php", { responseType: "text" })).match(/https?:\/\/[^ ]+/)?.[0]
       response = [ "看吧涩批！", segment.image(link) ]
     } else if (msg.includes("随机") || msg.includes("来张") || Config.Picture.Direct) {
@@ -55,6 +55,8 @@ export class Random_Pictures extends plugin {
       if (file) {
         response = [ segment.image(file) ]
       }
+    } else {
+      return false
     }
 
     if (response.length > 0) {
