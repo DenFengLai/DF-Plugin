@@ -62,13 +62,13 @@ export default new class {
         switch (response.status) {
           case 401:
             msg = "访问令牌无效或已过期"
-            break
+            return "return"
           case 403:
-            msg = "请求达到Api速率限制，请尝试填写token或稍后再试"
-            break
+            msg = "请求达到Api速率限制，请尝试填写token或降低请求频率后重试"
+            return "return"
           case 404:
             msg = "仓库不存在"
-            break
+            return "return"
           default:
             msg = `状态码：${response.status}`
             break
@@ -87,7 +87,7 @@ export default new class {
       return await response.json()
     } catch (error) {
       logger.error(`请求失败: ${url}，错误信息: ${error.stack}`)
-      return false
+      return "return"
     }
   }
 }()

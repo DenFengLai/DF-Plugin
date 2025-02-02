@@ -70,6 +70,7 @@ export default new class CodeUpdate {
 
         const [ path, branch ] = type === "commits" ? repo.split(":") : [ repo ]
         let data = await GitApi.getRepositoryData(path, source, type, token, branch)
+        if (data === "return") return
         if (!data || [ "Not Found Projec", "Not Found" ].includes(data?.message)) {
           logger.error(`${logger.magenta(source)}: ${logger.cyan(repo)} 仓库不存在`)
           return
