@@ -9,7 +9,7 @@ export class DF_Poke extends plugin {
     super({
       name: "DF:戳一戳",
       dsc: "戳一戳机器人发送随机表情包",
-      event: "notice.group.poke",
+      event: "notice.*.poke",
       priority: -114,
       rule: [ { fnc: "poke", log: false } ]
     })
