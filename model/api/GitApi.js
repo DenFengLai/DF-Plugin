@@ -64,10 +64,10 @@ export default new class {
             msg = "访问令牌无效或已过期"
             return "return"
           case 403:
-            msg = "请求达到Api速率限制，请尝试填写token或降低请求频率后重试"
+            msg = "请求达到Api速率限制，请尝试填写token或降低请求频率后重试 (code: 403)"
             return "return"
           case 404:
-            msg = "仓库不存在"
+            msg = "仓库不存在 (code: 404)"
             return "return"
           default:
             msg = `状态码：${response.status}`

@@ -5,6 +5,7 @@ import { GitApi } from "./api/index.js"
 import { PluginPath } from "#model"
 import { Config, Res_Path, common as Common } from "#components"
 import { marked } from "marked"
+import lodash from "lodash"
 
 const key = "DF:CodeUpdate"
 
@@ -69,6 +70,7 @@ export default new class CodeUpdate {
         logger.debug(`请求 ${logger.magenta(source)} ${type}: ${logger.cyan(repo)}`)
 
         const [ path, branch ] = type === "commits" ? repo.split(":") : [ repo ]
+        if (Array.isArray(token)) token = lodash.sample(token)
         let data = await GitApi.getRepositoryData(path, source, type, token, branch)
         if (data === "return") return
         if (!data || [ "Not Found Projec", "Not Found" ].includes(data?.message)) {
