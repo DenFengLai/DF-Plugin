@@ -11,15 +11,11 @@ export class DFupdate extends plugin {
       priority: 1000,
       rule: [
         {
-          reg: "^#[Dd][Ff](插件)?(强制)?更新$",
+          reg: "^#[Dd][Ff](插件)?(强制)?更新(日志)?$",
           fnc: "update"
         },
         {
-          reg: "^#[Dd][Ff](插件)?更新日志$",
-          fnc: "updateLog"
-        },
-        {
-          reg: "^#?[Dd][Ff](安装|更新)(戳一戳)?图库$",
+          reg: "^#?[Dd][Ff](安装|(强制)?更新)(戳一戳)?图库$",
           fnc: "up_img"
         }
       ]
@@ -27,25 +23,21 @@ export class DFupdate extends plugin {
   }
 
   async update(e = this.e) {
-    const Type = e.msg.includes("强制") ? "#强制更新" : "#更新"
+    let isLog = e.msg.includes("日志")
+    let Type = isLog ? "#更新日志" : (e.msg.includes("强制") ? "#强制更新" : "#更新")
     e.msg = Type + Plugin_Name
     const up = new Update(e)
     up.e = e
-    return up.update()
-  }
-
-  async updateLog(e = this.e) {
-    e.msg = "#更新日志" + Plugin_Name
-    const up = new Update(e)
-    up.e = e
-    return up.updateLog()
+    return isLog ? up.updateLog() : up.update()
   }
 
   async up_img(e) {
     if (!e.isMaster) return false
     if (fs.existsSync(Poke_Path)) {
       await e.reply("正在更新，请主人稍安勿躁~")
-      return exec("git pull", { cwd: Poke_Path }, (error, stdout) => {
+      let command = "git pull"
+      if (e.msg.includes("强制")) command = "git reset --hard origin/main && git pull --rebase"
+      return exec(command, { cwd: Poke_Path }, (error, stdout) => {
         if (/Already up to date/.test(stdout) || stdout.includes("最新")) return e.reply("目前所有图片都已经是最新了~")
         let numRet = /(\d*) files changed,/.exec(stdout)
         if (numRet && numRet[1]) {
@@ -57,7 +49,7 @@ export class DFupdate extends plugin {
         }
       })
     } else {
-      let command = "git clone  --depth=1 https://gitee.com/DenFengLai/poke ./resources/poke"
+      let command = "git clone  --depth=1 https://gitea.eustia.fun/XY/poke.git ./resources/poke"
       await e.reply("开始安装戳一戳图库,可能需要一段时间,请主人稍安勿躁~")
       return exec(command, { cwd: Plugin_Path }, (error) => {
         if (error) {
