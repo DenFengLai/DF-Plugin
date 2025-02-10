@@ -1,4 +1,7 @@
-export const Poke_List = [
+// import { Poke_Path } from "./Path.js"
+// import fs from "node:fs"
+
+let Poke_List = [
   "default",
   "柴郡猫",
   "丛雨",
@@ -19,5 +22,16 @@ export const Poke_List = [
   "miku",
   "特蕾西娅",
   "doro",
-  "米塔"
+  "米塔",
+  "冬川花璃"
 ]
+
+/** 没写好，等重构 */
+// if (fs.existsSync(Poke_Path)) {
+//   const directories = fs.readdirSync(Poke_Path, { withFileTypes: true })
+//     .filter(dirent => dirent.isDirectory() && dirent.name !== ".git")
+//     .map(dirent => dirent.name)
+//   Poke_List = Array.from(new Set([ ...Poke_List, ...directories ]))
+// }
+
+export { Poke_List }
