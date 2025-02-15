@@ -8,7 +8,7 @@ export default new class {
    * @param {string} type - 请求类型（commits/releases）
    * @param {string} token - 访问Token
    * @param {string} sha - 提交起始的SHA值或者分支名. 默认: 仓库的默认分支
-   * @returns {Promise<object[]>} 提交数据或空数组
+   * @returns {Promise<object[]>} 提交数据或false（请求失败）
    */
   async getRepositoryData(repo, source, type = "commits", token, sha) {
     const isGitHub = source === "GitHub"
