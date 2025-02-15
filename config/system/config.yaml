@@ -21,6 +21,11 @@ CodeUpdate:
     获取地址： https://github.com/settings/tokens
   GithubToken: ""
 
+  GitcodeTokenTips: |-
+    Gitcode个人Token
+    获取地址： https://gitcode.com/setting/token-classic
+  GitcodeToken: ""
+
   ListTips: |-
     推送配置
     Group: 推送的群聊列表

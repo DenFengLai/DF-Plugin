@@ -21,10 +21,10 @@ import { Path, Poke_Path } from "#components"
 PluginDirs()
 
 /**
- * 插件远程路径，包含 GitHub 和 Gitee 仓库
+ * 插件远程路径，包含 GitHub、Gitee 和 GitCode
  * @type {object}
  */
-export const PluginPath = { github: [], gitee: [] }
+export const PluginPath = { github: [], gitee: [], gitcode: [] }
 
 /**
  * 获取插件对应远程路径
@@ -41,6 +41,7 @@ async function PluginDirs() {
   console.timeEnd("获取Git目录")
   PluginPath.github.push(...result.github)
   PluginPath.gitee.push(...result.gitee)
+  PluginPath.gitcode.push(...result.gitcode)
 }
 
 /**
@@ -49,7 +50,7 @@ async function PluginDirs() {
  * @param {object} result - 数据对象
  * @returns {Promise<object>} result - 获取到的插件路径
  */
-async function traverseDirectories(dir, result = { github: [], gitee: [] }) {
+async function traverseDirectories(dir, result = { github: [], gitee: [], gitcode: [] }) {
   try {
     const items = await fs.readdir(dir)
     const promises = items.map(async(item) => {
@@ -136,6 +137,12 @@ function classifyRepo(url, branch, result) {
     if (parts[1]) {
       const repoPath = parts[1].replace(/(\/|\.git)$/, "") + `:${branch}`
       result.gitee.push(repoPath)
+    }
+  } else if (url.includes("gitcode.com")) {
+    const parts = url.split("gitcode.com/")
+    if (parts[1]) {
+      const repoPath = parts[1].replace(/(\/|\.git)$/, "") + `:${branch}`
+      result.gitcode.push(repoPath)
     }
   }
 }

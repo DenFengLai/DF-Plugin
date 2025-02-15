@@ -4,15 +4,29 @@ export default new class {
   /**
    * 获取仓库的最新数据
    * @param {string} repo - 仓库路径（用户名/仓库名）
-   * @param {string} source - 数据源（GitHub/Gitee）
+   * @param {string} source - 数据源（GitHub/Gitee/Gitcode）
    * @param {string} type - 请求类型（commits/releases）
    * @param {string} token - 访问Token
    * @param {string} sha - 提交起始的SHA值或者分支名. 默认: 仓库的默认分支
    * @returns {Promise<object[]>} 提交数据或false（请求失败）
    */
   async getRepositoryData(repo, source, type = "commits", token, sha) {
-    const isGitHub = source === "GitHub"
-    const baseURL = isGitHub ? "https://api.github.com/repos" : "https://gitee.com/api/v5/repos"
+    let isGitHub = false, baseURL
+    switch (source) {
+      case "GitHub":
+        isGitHub = true
+        baseURL = "https://api.github.com/repos"
+        break
+      case "Gitee":
+        baseURL = "https://gitee.com/api/v5/repos"
+        break
+      case "Gitcode":
+        baseURL = "https://api.gitcode.com/api/v5/repos"
+        break
+      default:
+        logger.error(`未知数据源: ${source}`)
+        return "return"
+    }
     const path = sha ? `${repo}/commits/${sha}` : `${repo}/${type}?per_page=1`
     let url = `${baseURL}/${path}`
 
@@ -28,13 +42,24 @@ export default new class {
   /**
    * 获取请求头
    * @param {string} token - 访问Token
-   * @param {string} source - 数据源（GitHub/Gitee）
+   * @param {string} source - 数据源（GitHub/Gitee/Gitcode）
    * @returns {object} 请求头
    */
   getHeaders(token, source) {
     const headers = {
       "User-Agent": "request",
-      "Accept": source === "GitHub" ? "application/vnd.github+json" : "application/vnd.gitee+json"
+      "Accept": (() => {
+        switch (source) {
+          case "GitHub":
+            return "application/vnd.github+json"
+          case "Gitee":
+            return "application/vnd.gitee+json"
+          case "Gitcode":
+            return "application/json"
+          default:
+            return "application/json"
+        }
+      })()
     }
     if (token) {
       headers.Authorization = `Bearer ${token}`
@@ -61,10 +86,10 @@ export default new class {
         let msg
         switch (response.status) {
           case 401:
-            msg = "访问令牌无效或已过期"
+            msg = "访问令牌无效或已过期 (code: 401)"
             return "return"
           case 403:
-            msg = "请求达到Api速率限制，请尝试填写token或降低请求频率后重试 (code: 403)"
+            msg = "请求达到Api速率限制或无权限，请尝试填写token或降低请求频率后重试 (code: 403)"
             return "return"
           case 404:
             msg = "仓库不存在 (code: 404)"

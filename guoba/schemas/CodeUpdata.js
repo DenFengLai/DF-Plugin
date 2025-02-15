@@ -41,6 +41,16 @@ export default [
     }
   },
   {
+    field: "CodeUpdate.GitcodeToken",
+    label: "Gitcode Api Token",
+    helpMessage: "用于请求Gitcode Api",
+    bottomHelpMessage: "获取地址：https://github.com/settings/tokens",
+    component: "InputPassword",
+    componentProps: {
+      placeholder: "请输入Token"
+    }
+  },
+  {
     field: "CodeUpdate.List",
     label: "推送列表",
     bottomHelpMessage: "Git仓库推送列表",
@@ -135,6 +145,23 @@ export default [
         {
           field: "GiteeReleases",
           label: "Gitee发行版仓库路径",
+          bottomHelpMessage: "格式：所有者/存储库:分支",
+          component: "GTags",
+          componentProps: {
+            allowAdd: true,
+            allowDel: true
+          },
+          showPrompt: true,
+          promptProps: {
+            content: "请输入 所有者/存储库:分支",
+            placeholder: "请输入仓库路径",
+            okText: "添加",
+            rules: [ { required: true, message: "不可以为空哦" } ]
+          }
+        },
+        {
+          field: "GitcodeList",
+          label: "Gitcode仓库路径",
           bottomHelpMessage: "格式：所有者/存储库:分支",
           component: "GTags",
           componentProps: {

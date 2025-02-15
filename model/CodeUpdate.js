@@ -7,11 +7,11 @@ import { Config, Res_Path, common as Common } from "#components"
 import { marked } from "marked"
 import lodash from "lodash"
 
-const key = "DF:CodeUpdate"
+const _key = "DF:CodeUpdate"
 
 export default new class CodeUpdate {
   async checkUpdates(isAuto = false, e) {
-    const { GithubToken = "", GiteeToken = "", List = [] } = Config.CodeUpdate
+    const { GithubToken = "", GiteeToken = "", GitcodeToken = "", List = [] } = Config.CodeUpdate
 
     if (!List.length) {
       logger.mark("[DF-Plugin][CodeUpdate]没有配置仓库信息，取消检查更新")
@@ -21,10 +21,13 @@ export default new class CodeUpdate {
     logger.mark(logger.blue("开始检查仓库更新"))
 
     let number = 0
+
+    const promises = []
     for (const list of List) {
       const {
         GithubList = [],
         GiteeList = [],
+        GitcodeList = [],
         GiteeReleases = [],
         GithubReleases = [],
         AutoPath = false,
@@ -33,15 +36,28 @@ export default new class CodeUpdate {
         QQ = []
       } = list
 
-      const githubRepos = AutoPath ? [ ...new Set([ ...GithubList, ...PluginPath.github ]) ].filter(path => !Exclude.includes(path)) : GithubList
-      const giteeRepos = AutoPath ? [ ...new Set([ ...GiteeList, ...PluginPath.gitee ]) ].filter(path => !Exclude.includes(path)) : GiteeList
+      // 获取过滤后的仓库列表
+      const githubRepos = this.getRepoList(GithubList, PluginPath.github, Exclude, AutoPath)
+      const giteeRepos = this.getRepoList(GiteeList, PluginPath.gitee, Exclude, AutoPath)
+      const gitcodeRepos = this.getRepoList(GitcodeList, PluginPath.gitcode, Exclude, AutoPath)
 
-      const promises = []
-      if (githubRepos.length > 0) promises.push(this.fetchUpdates(githubRepos, "GitHub", GithubToken, "commits", `${key}:GitHub`, isAuto))
-      if (giteeRepos.length > 0) promises.push(this.fetchUpdates(giteeRepos, "Gitee", GiteeToken, "commits", `${key}:Gitee`, isAuto))
-      if (GiteeReleases.length > 0) promises.push(this.fetchUpdates(GiteeReleases, "Gitee", GiteeToken, "releases", `${key}:GiteeReleases`, isAuto))
-      if (GithubReleases.length > 0) promises.push(this.fetchUpdates(GithubReleases, "GitHub", GithubToken, "releases", `${key}:GithubReleases`, isAuto))
+      // 收集所有需要的更新请求
+      const updateRequests = [
+        { list: githubRepos, platform: "GitHub", token: GithubToken, type: "commits", key: "GitHub" },
+        { list: giteeRepos, platform: "Gitee", token: GiteeToken, type: "commits", key: "Gitee" },
+        { list: gitcodeRepos, platform: "Gitcode", token: GitcodeToken, type: "commits", key: "Gitcode" },
+        { list: GiteeReleases, platform: "Gitee", token: GiteeToken, type: "releases", key: "GiteeReleases" },
+        { list: GithubReleases, platform: "GitHub", token: GithubToken, type: "releases", key: "GithubReleases" }
+      ]
 
+      // 将所有请求转换成 promise
+      updateRequests.forEach(({ list, platform, token, type, key }) => {
+        if (list.length > 0) {
+          promises.push(this.fetchUpdateForRepo(list, platform, token, type, key, isAuto))
+        }
+      })
+
+      // 等待所有请求完成
       const results = await Promise.all(promises)
       const content = results.flat()
 
@@ -53,11 +69,25 @@ export default new class CodeUpdate {
       }
     }
 
+    // 输出最终日志信息
     if (number > 0) {
-      logger.info(logger.green(`ヾ(≧▽≦*)o 本次共获取到${number}条数据~`))
+      logger.info(logger.green(`共获取到 ${number} 条数据~`))
     } else {
-      logger.info(logger.yellow("＞︿＜ 本次没有获取到任何数据~"))
+      logger.info(logger.yellow("没有获取到任何数据"))
     }
+  }
+
+  // 提取为辅助函数处理仓库路径列表
+  getRepoList(list, pluginPath, exclude, autoPath) {
+    return autoPath ? [ ...new Set([ ...list, ...pluginPath ]) ].filter(path => !exclude.includes(path)) : list
+  }
+
+  // 提取更新请求的逻辑
+  async fetchUpdateForRepo(list, platform, token, type, key, isAuto) {
+    if (list.length > 0) {
+      return this.fetchUpdates(list, platform, token, type, `${_key}:${key}`, isAuto)
+    }
+    return []
   }
 
   async fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAuto) {
