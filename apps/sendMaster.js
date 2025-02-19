@@ -113,10 +113,16 @@ export class SendMasterMsgs extends plugin {
 
     try {
       const source = await getSourceMessage(e)
-      if (!source || !(/联系主人消息/.test(source.raw_message))) return false
+      if (!source || !(/联系主人消息/.test(source.raw_message))) {
+        logger.debug("[DF-Plugin][SendMaster] 无效引用")
+        return false
+      }
 
       const MsgID = extractMessageId(source.raw_message)
-      if (!MsgID) return false
+      if (!MsgID) {
+        logger.debug("[DF-Plugin][SendMaster] 无效消息ID")
+        return false
+      }
 
       const data = await redis.get(`${key}:${MsgID}`)
       if (!data) return e.reply("消息太久远了，下次来早点吧~")
