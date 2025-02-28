@@ -22,8 +22,8 @@ export default new class CodeUpdate {
 
     let number = 0
 
-    const promises = []
     for (const list of List) {
+      const promises = []
       const {
         GithubList = [],
         GiteeList = [],
@@ -36,12 +36,10 @@ export default new class CodeUpdate {
         QQ = []
       } = list
 
-      // 获取过滤后的仓库列表
       const githubRepos = this.getRepoList(GithubList, PluginPath.github, Exclude, AutoPath)
       const giteeRepos = this.getRepoList(GiteeList, PluginPath.gitee, Exclude, AutoPath)
       const gitcodeRepos = this.getRepoList(GitcodeList, PluginPath.gitcode, Exclude, AutoPath)
 
-      // 收集所有需要的更新请求
       const updateRequests = [
         { list: githubRepos, platform: "GitHub", token: GithubToken, type: "commits", key: "GitHub" },
         { list: giteeRepos, platform: "Gitee", token: GiteeToken, type: "commits", key: "Gitee" },
@@ -50,14 +48,12 @@ export default new class CodeUpdate {
         { list: GithubReleases, platform: "GitHub", token: GithubToken, type: "releases", key: "GithubReleases" }
       ]
 
-      // 将所有请求转换成 promise
       updateRequests.forEach(({ list, platform, token, type, key }) => {
         if (list.length > 0) {
           promises.push(this.fetchUpdateForRepo(list, platform, token, type, key, isAuto))
         }
       })
 
-      // 等待所有请求完成
       const results = await Promise.all(promises)
       const content = results.flat()
 
@@ -69,7 +65,6 @@ export default new class CodeUpdate {
       }
     }
 
-    // 输出最终日志信息
     if (number > 0) {
       logger.info(logger.green(`共获取到 ${number} 条数据~`))
     } else {
@@ -77,12 +72,10 @@ export default new class CodeUpdate {
     }
   }
 
-  // 提取为辅助函数处理仓库路径列表
   getRepoList(list, pluginPath, exclude, autoPath) {
     return autoPath ? [ ...new Set([ ...list, ...pluginPath ]) ].filter(path => !exclude.includes(path)) : list
   }
 
-  // 提取更新请求的逻辑
   async fetchUpdateForRepo(list, platform, token, type, key, isAuto) {
     if (list.length > 0) {
       return this.fetchUpdates(list, platform, token, type, `${_key}:${key}`, isAuto)
