@@ -5,7 +5,7 @@ import fs from "node:fs/promises"
 import { Plugin_Name, Plugin_Path } from "../constants/Path.js"
 import _ from "lodash"
 
-export class Config {
+class Config {
   plugin_name = Plugin_Name
   plugin_path = Plugin_Path
   /** 初始化配置 */
@@ -82,8 +82,8 @@ export class Config {
 
   /**
    * 群配置
-   * @param group_id
-   * @param bot_id
+   * @param group_id 群号
+   * @param bot_id 机器人账号
    */
   getGroup(group_id = "", bot_id = "") {
     return Array.isArray(Bot.uin) ? cfg.getGroup(bot_id, group_id) : cfg.getGroup(group_id)
