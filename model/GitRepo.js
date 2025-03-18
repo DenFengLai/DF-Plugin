@@ -36,9 +36,9 @@ export async function getPluginsRepo() {
 
 /** 遍历插件目录，载入常量 */
 async function PluginDirs() {
-  console.time("获取Git目录")
+  console.time("载入本地Git仓库列表")
   const result = await getPluginsRepo()
-  console.timeEnd("获取Git目录")
+  console.timeEnd("载入本地Git仓库列表")
   PluginPath.github.push(...result.github)
   PluginPath.gitee.push(...result.gitee)
   PluginPath.gitcode.push(...result.gitcode)
@@ -52,19 +52,21 @@ async function PluginDirs() {
  */
 async function traverseDirectories(dir, result = { github: [], gitee: [], gitcode: [] }) {
   try {
+    if (await isGitRepo(dir)) {
+      await getGitUrl(dir, result)
+    }
+
     const items = await fs.readdir(dir)
     const promises = items.map(async(item) => {
       if (item === "data" || item === "node_modules") return
 
-      const itemPath = path.join(dir, item)
-      const stat = await fs.stat(itemPath)
+      const directory = path.join(dir, item)
+      const stat = await fs.stat(directory)
       if (stat.isDirectory()) {
-        if (await isGitRepo(itemPath)) {
-          const branch = await getRemoteBranch(itemPath)
-          const remoteUrl = await getRemoteUrl(itemPath, branch)
-          if (remoteUrl) classifyRepo(remoteUrl, branch, result)
+        if (await isGitRepo(directory)) {
+          await getGitUrl(directory, result)
         } else {
-          await traverseDirectories(itemPath, result)
+          await traverseDirectories(directory, result)
         }
       }
     })
@@ -75,6 +77,16 @@ async function traverseDirectories(dir, result = { github: [], gitee: [], gitcod
   return result
 }
 
+/**
+ * 获取Git仓库的URL并添加到指定的数组中
+ * @param {string} dir 路径
+ * @param {object} result - 存储 GitHub 和 Gitee 仓库的对象
+ */
+async function getGitUrl(dir, result) {
+  const branch = await getRemoteBranch(dir)
+  const remoteUrl = await getRemoteUrl(dir, branch)
+  if (remoteUrl) classifyRepo(remoteUrl, branch, result)
+}
 /**
  * 检查是否为 Git 仓库
  * @param {string} dir - 检查的目录路径
