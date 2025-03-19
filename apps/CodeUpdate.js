@@ -10,7 +10,7 @@ export class CodeUpdate extends plugin {
       priority: 5000,
       rule: [
         {
-          reg: "^#检查仓库更新$",
+          reg: "^#(检查|推送)仓库更新$",
           fnc: "cupdate"
         }
       ]
@@ -26,6 +26,15 @@ export class CodeUpdate extends plugin {
   }
 
   async cupdate(e) {
-    return Cup.checkUpdates(false, e)
+    const isPush = e.msg.includes("推送")
+    e.reply(`正在${isPush ? "推送" : "检查"}仓库更新，请稍等`)
+
+    const res = await Cup.checkUpdates(!isPush, e)
+    if (!isPush) {
+      const msg = res?.number > 0
+        ? `检查完成，共有${res.number}个仓库有更新，正在按照你的配置进行推送哦~`
+        : "检查完成，没有发现仓库有更新"
+      return e.reply(msg)
+    }
   }
 }

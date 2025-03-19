@@ -10,6 +10,12 @@ import lodash from "lodash"
 const _key = "DF:CodeUpdate"
 
 export default new class CodeUpdate {
+  /**
+   * 获取仓库更新
+   * @param {boolean} isAuto 是否为自动获取
+   * @param {object} e 消息事件
+   * @returns {boolean|object} 是否有更新 | { number: number }
+   */
   async checkUpdates(isAuto = false, e) {
     const { GithubToken = "", GiteeToken = "", GitcodeToken = "", List = [] } = Config.CodeUpdate
 
@@ -70,6 +76,7 @@ export default new class CodeUpdate {
     } else {
       logger.info(logger.yellow("没有获取到任何数据"))
     }
+    return { number }
   }
 
   getRepoList(list, pluginPath, exclude, autoPath) {
