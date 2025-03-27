@@ -1,4 +1,4 @@
-import { PluginPath } from "#model"
+import { PluginPaths } from "#model"
 
 export default [
   {
@@ -88,7 +88,7 @@ export default [
           componentProps: {
             allowClear: true,
             mode: "tags",
-            options: Array.from((new Set([ ...PluginPath.gitee, ...PluginPath.github ]))).map((name) => ({ value: name }))
+            options: PluginPaths.map((name) => ({ value: name }))
           }
         },
         {
