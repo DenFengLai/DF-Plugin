@@ -1,21 +1,7 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { exec } from "child_process"
-import { Path, Poke_Path } from "#components"
-
-/** 自动迁移图库地址 */
-(async() => {
-  const fs = (await import("node:fs")).default
-  if (fs.existsSync(Poke_Path)) {
-    const branch = await getRemoteBranch(Poke_Path)
-    const remoteUrl = await getRemoteUrl(Poke_Path, branch)
-    if (/gitee.com\/DenFengLai\/poke/i.test(remoteUrl)) {
-      logger.warn("[DF-Poke] 图库地址迁移中...")
-      executeCommand(`git remote set-url ${await getRemoteName(Poke_Path, branch)} https://gitea.eustia.fun/XY/poke.git`, Poke_Path)
-      logger.info("[DF-Poke] 图库地址迁移完成,您现在可以尝试使用 #DF更新图库 命令来更新图片")
-    }
-  }
-})()
+import { Path } from "#components"
 
 /** 初始化常量 */
 PluginDirs()

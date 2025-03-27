@@ -88,7 +88,7 @@ export default [
           componentProps: {
             allowClear: true,
             mode: "tags",
-            options: Array.from((new Set([ ...PluginPath.gitee, ...PluginPath.github ]))).map((name) => ({ value: name }))
+            options: Array.from(new Set(Object.values(PluginPath).flat())).map((name) => ({ value: name }))
           }
         },
         {
