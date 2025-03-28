@@ -100,13 +100,13 @@ export default new class {
         }
 
         logger.error(`请求 ${logger.magenta(source)} 失败: ${logger.cyan(repo)}, ${msg}`)
-        return false
+        return "return"
       }
 
       const contentType = response.headers.get("content-type")
       if (!contentType || !contentType.includes("application/json")) {
         logger.error(`响应非 JSON 格式: ${url} , 内容：${await response.text()}`)
-        return false
+        return "return"
       }
 
       return await response.json()
