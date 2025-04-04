@@ -54,8 +54,6 @@ export default new class {
             return "application/vnd.github+json"
           case "Gitee":
             return "application/vnd.gitee+json"
-          case "Gitcode":
-            return "application/json"
           default:
             return "application/json"
         }

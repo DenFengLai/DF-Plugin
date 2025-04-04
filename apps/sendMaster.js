@@ -8,6 +8,7 @@ import { segment } from "oicq"
 const key = "DF:contact"
 let Sending = false
 segment.reply ??= (id) => ({ type: "reply", id })
+let ReplyReg = /^#?回复(\S+)\s?(.*)?$/
 
 export class SendMasterMsgs extends plugin {
   constructor() {
@@ -22,7 +23,7 @@ export class SendMasterMsgs extends plugin {
           fnc: "contact"
         },
         {
-          reg: "^#?回复",
+          reg: ReplyReg,
           fnc: "Replys",
           event: "message.private"
         }
@@ -62,17 +63,17 @@ export class SendMasterMsgs extends plugin {
       const id = ulid().slice(-5)
 
       const msg = [
-      `联系主人消息(${id})\n`,
-      (avatar && sendAvatar) ? avatar : "",
-      `平台: ${type}\n`,
-      `用户: ${user_id}\n`,
-      `来自: ${group}\n`,
-      `BOT: ${bot}\n`,
-      `时间: ${time}\n`,
-      "消息内容:\n",
-      ...message,
-      "\n-------------\n",
-      "引用该消息：#回复 <内容>"
+        `联系主人消息(${id})\n`,
+        (avatar && sendAvatar) ? avatar : "",
+        `平台: ${type}\n`,
+        `用户: ${user_id}\n`,
+        `来自: ${group}\n`,
+        `BOT: ${bot}\n`,
+        `时间: ${time}\n`,
+        "消息内容:\n",
+        ...message,
+        "\n-------------\n",
+        "引用该消息：#回复 <内容>"
       ]
 
       const info = {
@@ -113,31 +114,28 @@ export class SendMasterMsgs extends plugin {
 
     try {
       const source = await getSourceMessage(e)
-      if (!source || !(/联系主人消息/.test(source.raw_message))) {
-        logger.debug("[DF-Plugin][SendMaster] 无效引用")
-        return false
-      }
-
-      const MsgID = extractMessageId(source.raw_message)
-      if (!MsgID) {
-        logger.debug("[DF-Plugin][SendMaster] 无效消息ID")
-        return false
+      let MsgID, isInput = false
+      if (source && (/联系主人消息/.test(source.raw_message))) {
+        MsgID = extractMessageId(source.raw_message)
+      } else {
+        const regRet = ReplyReg.exec(e.msg)
+        if (!regRet[1]) return logger.warn("[DF-Plugin] 未找到消息ID")
+        else {
+          MsgID = regRet[1].trim()
+          isInput = true
+        }
       }
 
       const data = await redis.get(`${key}:${MsgID}`)
-      if (!data) return e.reply("消息太久远了，下次来早点吧~")
+      if (!data) return isInput ? false : e.reply("❎ 消息已失效或不存在")
 
       const { bot, group, id, message_id } = JSON.parse(data)
-      const message = await common.Replace(e, /#?回复/g)
+      const message = await common.Replace(e, isInput ? /#?回复(\S+)\s?/ : /#?回复/g)
       message.unshift(`主人${Config.sendMaster.replyQQ ? `(${e.user_id})` : ""}回复：\n`, segment.reply(message_id))
 
       this.Bot = Bot[bot] ?? Bot
 
-      if (group) {
-        await this.Bot.pickGroup(group).sendMsg(message)
-      } else {
-        await this.Bot.pickFriend(id).sendMsg(message)
-      }
+      group ? await this.Bot.pickGroup(group).sendMsg(message) : await this.Bot.pickFriend(id).sendMsg(message)
 
       return e.reply("✅ 消息已送达")
     } catch (err) {
