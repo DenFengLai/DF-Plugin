@@ -53,14 +53,13 @@ pnpm install
 
 - #联系主人 + `消息内容`  
 
-> 详细配置请见[config/sendMaster.yaml](/config/default_config/sendMaster.yaml)
+> #回复<内容> 或 #回复<消息标识><空格><内容>
 
 </details>
 
 <details><summary>随机表情戳一戳</summary>
 
 > 戳一戳返回随机表情包  
-> 配置项请看[config/other.yaml](/config/default_config/other.yaml)  
 > 使用 #DF安装图库 可安装图库到本地使用  
 > 未安装图库将调用[XY-Api](https://api.yugan.love/)
 
@@ -71,7 +70,8 @@ pnpm install
 > 在[配置文件](/config/default_config/CodeUpdate.yaml)配置完成填写群号后即可使用。  
 > 推荐使用[锅巴插件](https://gitee.com/guoba-yunzai/guoba-plugin.git)进行配置
 
-- 使用`#检查仓库更新`可以手动进行一次推送
+- `#检查仓库更新`: 检查有没有仓库更新（相当于主动触发定时逻辑）
+- `#推送仓库更新`: 不管有没有更新都回复到当前会话，不会推送所有群组
 
 </details>
 
@@ -153,7 +153,6 @@ pnpm install
 ## 👥 联系我们
 
 - QQ交流群: [964193559](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=hGiK1lQOmbJzP7S0xm-00NKdNi9Oe8Ma&authKey=aQRGoOwAyQ%2BYZ%2BZ5QNKJegwf5Y%2BgYM3Y%2F3%2Fc61cSquEuoIPM1qKemM6ajHb0sRFk&noverify=0&group_code=964193559)
-- Terlegram: [点击加入](https://t.me/dengfenglaidudu)
 
 ## ⭐ 支持本项目
 
@@ -168,7 +167,7 @@ pnpm install
 - [TRSS.me](https://TRSS.me)
 - [Yenai-Plugin](https://Yenai.TRSS.me)
 - [Fanji-plugin](http://gitee.com/adrae/Fanji-plugin)
-- [DF-Poke](https://gitee.com/DenFengLai/poke)
+- [DF-Poke](https://gitea.eustia.fun/XY/poke.git)
 
 ## 🎁 特别鸣谢
 
