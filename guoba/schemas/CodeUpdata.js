@@ -44,7 +44,7 @@ export default [
     field: "CodeUpdate.GitcodeToken",
     label: "Gitcode Api Token",
     helpMessage: "用于请求Gitcode Api",
-    bottomHelpMessage: "获取地址：https://github.com/settings/tokens",
+    bottomHelpMessage: "获取地址：https://gitcode.com/setting/token-classic",
     component: "InputPassword",
     componentProps: {
       placeholder: "请输入Token"
