@@ -40,6 +40,39 @@ export default new class {
   }
 
   /**
+   * 获取仓库默认分支
+   * @param {string} repo - 仓库路径（用户名/仓库名）
+   * @param {string} source - 数据源（GitHub/Gitee/Gitcode）
+   * @param {string} token - 访问Token
+   * @returns {Promise<string|false>} 默认分支名或false（请求失败）
+   */
+  async getDefaultBranch(repo, source, token) {
+    let baseURL
+    switch (source) {
+      case "GitHub":
+        baseURL = "https://api.github.com/repos"
+        break
+      case "Gitee":
+        baseURL = "https://gitee.com/api/v5/repos"
+        break
+      case "Gitcode":
+        baseURL = "https://api.gitcode.com/api/v5/repos"
+        break
+      default:
+        logger.error(`未知数据源: ${source}`)
+        return "return"
+    }
+    const url = `${baseURL}/${repo}`
+
+    const headers = this.getHeaders(token, source)
+    const data = await this.fetchData(url, headers, repo, source)
+    if (data && data.default_branch) {
+      return data.default_branch
+    }
+    return false
+  }
+
+  /**
    * 获取请求头
    * @param {string} token - 访问Token
    * @param {string} source - 数据源（GitHub/Gitee/Gitcode）

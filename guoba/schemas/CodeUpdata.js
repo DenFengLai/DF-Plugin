@@ -11,6 +11,12 @@ export default [
     component: "Switch"
   },
   {
+    field: "CodeUpdate.AutoBranch",
+    label: "自动获取远程默认分支",
+    bottomHelpMessage: "在未指定分支的情况下，启动时自动获取远程仓库的默认分支",
+    component: "Switch"
+  },
+  {
     field: "CodeUpdate.Cron",
     label: "自动检查定时表达式",
     helpMessage: "修改后重启生效",

@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 import moment from "moment"
 import common from "../../../lib/common/common.js"
 import puppeteer from "../../../lib/puppeteer/puppeteer.js"
@@ -8,6 +9,7 @@ import { marked } from "marked"
 import lodash from "lodash"
 
 const _key = "DF:CodeUpdate"
+let AutoPathBranch = {}
 
 export default new class CodeUpdate {
   /**
@@ -99,7 +101,8 @@ export default new class CodeUpdate {
       try {
         logger.debug(`请求 ${logger.magenta(source)} ${type}: ${logger.cyan(repo)}`)
 
-        const [ path, branch ] = type === "commits" ? repo.split(":") : [ repo ]
+        let [ path, branch ] = type === "commits" ? repo.split(":") : [ repo ]
+        if (!branch) branch = AutoPathBranch[path] // || (await GitApi.getDefaultBranch(path, source, token))
         if (Array.isArray(token)) token = lodash.sample(token)
         let data = await GitApi.getRepositoryData(path, source, type, token, branch)
         if (data === "return") return
@@ -224,3 +227,70 @@ export default new class CodeUpdate {
     }
   }
 }()
+
+/** 对未设置分支的仓库进行处理 */
+let num = 0
+const promises = []
+if (Config.CodeUpdate.AutoBranch) {
+  Config.CodeUpdate.List?.length > 0 && Config.CodeUpdate.List.forEach((item) => {
+    const { GithubList = [], GiteeList = [], GitcodeList = [] } = item
+    if (GithubList.length > 0) {
+      GithubList.forEach((path) => {
+        if (!path.split(":")?.[1]) {
+          promises.push(
+            GitApi.getDefaultBranch(path.split(":")[0], "GitHub", Config.CodeUpdate.GithubToken)
+              .then((branch) => {
+                AutoPathBranch[path.split(":")[0]] = branch
+                num++
+              })
+              .catch((error) => {
+                logger.warn(`获取Github的默认分支失败 ${path.split(":")[0]}: ${error.message}`)
+              })
+          )
+        }
+      })
+    }
+    if (GiteeList.length > 0) {
+      GiteeList.forEach((path) => {
+        if (!path.split(":")?.[1]) {
+          promises.push(
+            GitApi.getDefaultBranch(path.split(":")[0], "Gitee", Config.CodeUpdate.GiteeToken)
+              .then((branch) => {
+                AutoPathBranch[path.split(":")[0]] = branch
+                num++
+              })
+              .catch((error) => {
+                logger.warn(`获取Gitee仓库的默认分支失败 ${path.split(":")[0]}: ${error.message}`)
+              })
+          )
+        }
+      })
+    }
+    if (GitcodeList.length > 0) {
+      GitcodeList.forEach((path) => {
+        if (!path.split(":")?.[1]) {
+          promises.push(
+            GitApi.getDefaultBranch(path.split(":")[0], "Gitcode", Config.CodeUpdate.GitcodeToken)
+              .then((branch) => {
+                AutoPathBranch[path.split(":")[0]] = branch
+                num++
+              })
+              .catch((error) => {
+                logger.warn(`获取默认分支失败 ${path.split(":")[0]}: ${error.message}`)
+              })
+          )
+        }
+      })
+    }
+  })
+
+  Promise.all(promises)
+    .then(() => {
+      if (num > 0) {
+        logger.info(`[DF-Plugin] 已自动获取到 ${logger.blue(num)} 个默认分支`)
+      }
+    })
+    .catch((error) => {
+      logger.error(`[DF-Plugin] 获取默认分支时发生错误: ${error.message}`)
+    })
+}
