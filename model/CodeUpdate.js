@@ -235,48 +235,54 @@ if (Config.CodeUpdate.AutoBranch) {
   Config.CodeUpdate.List?.length > 0 && Config.CodeUpdate.List.forEach((item) => {
     const { GithubList = [], GiteeList = [], GitcodeList = [] } = item
     if (GithubList.length > 0) {
-      GithubList.forEach((path) => {
+      GithubList.forEach((path, idx) => {
         if (!path.split(":")?.[1]) {
           promises.push(
             GitApi.getDefaultBranch(path.split(":")[0], "GitHub", Config.CodeUpdate.GithubToken)
               .then((branch) => {
-                AutoPathBranch[path.split(":")[0]] = branch
+                const repo = path.split(":")[0]
+                AutoPathBranch[repo] = branch
+                item.GithubList[idx] = `${repo}:${branch}`
                 num++
               })
               .catch((error) => {
-                logger.warn(`获取Github的默认分支失败 ${path.split(":")[0]}: ${error.message}`)
+                logger.warn(`[DF-Plugin] 获取Github的默认分支失败 ${path.split(":")[0]}: ${error.message}`)
               })
           )
         }
       })
     }
     if (GiteeList.length > 0) {
-      GiteeList.forEach((path) => {
+      GiteeList.forEach((path, idx) => {
         if (!path.split(":")?.[1]) {
           promises.push(
             GitApi.getDefaultBranch(path.split(":")[0], "Gitee", Config.CodeUpdate.GiteeToken)
               .then((branch) => {
-                AutoPathBranch[path.split(":")[0]] = branch
+                const repo = path.split(":")[0]
+                AutoPathBranch[repo] = branch
+                item.GiteeList[idx] = `${repo}:${branch}`
                 num++
               })
               .catch((error) => {
-                logger.warn(`获取Gitee仓库的默认分支失败 ${path.split(":")[0]}: ${error.message}`)
+                logger.warn(`[DF-Plugin] 获取Gitee仓库的默认分支失败 ${path.split(":")[0]}: ${error.message}`)
               })
           )
         }
       })
     }
     if (GitcodeList.length > 0) {
-      GitcodeList.forEach((path) => {
+      GitcodeList.forEach((path, idx) => {
         if (!path.split(":")?.[1]) {
           promises.push(
             GitApi.getDefaultBranch(path.split(":")[0], "Gitcode", Config.CodeUpdate.GitcodeToken)
               .then((branch) => {
-                AutoPathBranch[path.split(":")[0]] = branch
+                const repo = path.split(":")[0]
+                AutoPathBranch[repo] = branch
+                item.GitcodeList[idx] = `${repo}:${branch}`
                 num++
               })
               .catch((error) => {
-                logger.warn(`获取默认分支失败 ${path.split(":")[0]}: ${error.message}`)
+                logger.warn(`[DF-Plugin] 获取GitCode仓库默认分支失败 ${path.split(":")[0]}: ${error.message}`)
               })
           )
         }
