@@ -1,10 +1,10 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { exec } from "child_process"
-import { Path } from "#components"
+import { Path, Config } from "#components"
 
 /** 初始化常量 */
-PluginDirs()
+if (Config.AutoPath) PluginDirs()
 
 /**
  * 插件远程路径，包含 GitHub、Gitee 和 GitCode

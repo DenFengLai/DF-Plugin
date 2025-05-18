@@ -50,6 +50,10 @@ class Config {
     return cfg.master
   }
 
+  get AutoPath() {
+    return this.config.CodeUpdate.List.some(i => !!i?.AutoPath)
+  }
+
   /** 联系主人 */
   get sendMaster() {
     return this.config.sendMaster
