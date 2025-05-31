@@ -94,7 +94,9 @@ export default [
           componentProps: {
             allowClear: true,
             mode: "tags",
-            options: Array.from(new Set(Object.values(PluginPath).flat())).map((name) => ({ value: name }))
+            get options() {
+              return Array.from(new Set(Object.values(PluginPath).flat())).map((name) => ({ value: name }))
+            }
           }
         },
         {
