@@ -240,6 +240,7 @@ if (Config.CodeUpdate.AutoBranch) {
           promises.push(
             GitApi.getDefaultBranch(path.split(":")[0], "GitHub", Config.CodeUpdate.GithubToken)
               .then((branch) => {
+                if (!branch) throw new Error(`接口返回分支为空 ${branch}`)
                 const repo = path.split(":")[0]
                 AutoPathBranch[repo] = branch
                 item.GithubList[idx] = `${repo}:${branch}`
@@ -258,6 +259,7 @@ if (Config.CodeUpdate.AutoBranch) {
           promises.push(
             GitApi.getDefaultBranch(path.split(":")[0], "Gitee", Config.CodeUpdate.GiteeToken)
               .then((branch) => {
+                if (!branch) throw new Error(`接口返回分支为空 ${branch}`)
                 const repo = path.split(":")[0]
                 AutoPathBranch[repo] = branch
                 item.GiteeList[idx] = `${repo}:${branch}`
@@ -276,6 +278,7 @@ if (Config.CodeUpdate.AutoBranch) {
           promises.push(
             GitApi.getDefaultBranch(path.split(":")[0], "Gitcode", Config.CodeUpdate.GitcodeToken)
               .then((branch) => {
+                if (!branch) throw new Error(`接口返回分支为空 ${branch}`)
                 const repo = path.split(":")[0]
                 AutoPathBranch[repo] = branch
                 item.GitcodeList[idx] = `${repo}:${branch}`
