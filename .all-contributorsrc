@@ -71,6 +71,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Lovely-02",
+      "name": "02",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83761116?v=4",
+      "profile": "https://github.com/Lovely-02",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -78,5 +87,5 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "DF-Plugin",
-  "projectOwner": "Denfenglai"
+  "projectOwner": "DenFengLai"
 }
