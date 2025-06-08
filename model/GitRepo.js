@@ -124,22 +124,22 @@ async function getRemoteBranch(repoPath) {
  * @param {object} result - 存储 GitHub 和 Gitee 仓库的对象
  */
 function classifyRepo(url, branch, result) {
-  if (url.includes("github.com")) {
-    const parts = url.split("github.com/")
-    if (parts[1]) {
-      const repoPath = parts[1].replace(/(\/|\.git)$/, "") + `:${branch}`
+  if (url.match(/github\.com/i)) {
+    const parts = url.match(/(?:https?:\/\/|git@)github\.com[:/]([^/]+\/[^/.]+)/i)
+    if (parts?.[1]) {
+      const repoPath = parts[1].replace(/\.git$/, "") + `:${branch}`
       result.github.push(repoPath)
     }
-  } else if (url.includes("gitee.com")) {
-    const parts = url.split("gitee.com/")
-    if (parts[1]) {
-      const repoPath = parts[1].replace(/(\/|\.git)$/, "") + `:${branch}`
+  } else if (url.match(/gitee\.com/i)) {
+    const parts = url.match(/(?:https?:\/\/|git@)gitee\.com[:/]([^/]+\/[^/.]+)/i)
+    if (parts?.[1]) {
+      const repoPath = parts[1].replace(/\.git$/, "") + `:${branch}`
       result.gitee.push(repoPath)
     }
-  } else if (url.includes("gitcode.com")) {
-    const parts = url.split("gitcode.com/")
-    if (parts[1]) {
-      const repoPath = parts[1].replace(/(\/|\.git)$/, "") + `:${branch}`
+  } else if (url.match(/gitcode\.com/i)) {
+    const parts = url.match(/(?:https?:\/\/|git@)gitcode\.com[:/]([^/]+\/[^/.]+)/i)
+    if (parts?.[1]) {
+      const repoPath = parts[1].replace(/\.git$/, "") + `:${branch}`
       result.gitcode.push(repoPath)
     }
   }
