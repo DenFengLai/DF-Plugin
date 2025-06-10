@@ -3,85 +3,96 @@ import path from "node:path"
 import { exec } from "child_process"
 import { Path, Config } from "#components"
 
-/** 初始化常量 */
-if (Config.AutoPath) PluginDirs()
-
 /**
  * 插件远程路径，包含 GitHub、Gitee 和 GitCode
- * @type {object}
+ * @type {{ github: string[], gitee: string[], gitcode: string[] }}
  */
 export const PluginPath = { github: [], gitee: [], gitcode: [] }
 
-/**
- * 获取插件对应远程路径
- * @returns {Promise<object>} 插件路径
- */
-export async function getPluginsRepo() {
-  return traverseDirectories(Path)
-}
-
-/** 遍历插件目录，载入常量 */
-async function PluginDirs() {
-  console.time("载入本地Git仓库列表")
-  const result = await getPluginsRepo()
-  console.timeEnd("载入本地Git仓库列表")
-  PluginPath.github.push(...result.github)
-  PluginPath.gitee.push(...result.gitee)
-  PluginPath.gitcode.push(...result.gitcode)
-}
+// 初始化常量
+if (Config.AutoPath) loadLocalPlugins()
 
 /**
- * 递归遍历目录以查找包含 .git 的 Git 仓库
- * @param {string} dir - 当前遍历的目录路径
- * @param {object} result - 数据对象
- * @returns {Promise<object>} result - 获取到的插件路径
+ * 加载本地 Git 仓库并填充 PluginPath
+ * @returns {Promise<void>}
  */
-async function traverseDirectories(dir, result = { github: [], gitee: [], gitcode: [] }) {
+async function loadLocalPlugins() {
+  console.time("[DF-Plugin] 载入本地Git仓库列表")
   try {
-    if (await isGitRepo(dir)) {
-      await getGitUrl(dir, result)
-    }
-
-    const items = await fs.readdir(dir)
-    const promises = items.map(async(item) => {
-      if (item === "data" || item === "node_modules") return
-
-      const directory = path.join(dir, item)
-      const stat = await fs.stat(directory)
-      if (stat.isDirectory()) {
-        if (await isGitRepo(directory)) {
-          await getGitUrl(directory, result)
-        } else {
-          await traverseDirectories(directory, result)
-        }
-      }
-    })
-    await Promise.all(promises)
+    const { github, gitee, gitcode } = await findRepos(Path)
+    PluginPath.github.push(...github)
+    PluginPath.gitee.push(...gitee)
+    PluginPath.gitcode.push(...gitcode)
   } catch (err) {
-    console.error(`无法读取目录: ${dir}`, err)
+    logger.error("[DF-Plugin] 加载本地插件时出错:", err)
+  } finally {
+    console.timeEnd("[DF-Plugin] 载入本地Git仓库列表")
   }
+}
+
+/**
+ * 遍历目录并收集 Git 仓库信息
+ * @param {string} rootDir - 根目录路径
+ * @returns {Promise<{ github: string[], gitee: string[], gitcode: string[] }>} 收集到的仓库列表
+ */
+async function findRepos(rootDir) {
+  const result = { github: [], gitee: [], gitcode: [] }
+  await traverse(rootDir, result)
   return result
 }
 
+// 忽略的目录列表
+const IGNORE = new Set([ "data", "node_modules" ])
+
 /**
- * 获取Git仓库的URL并添加到指定的数组中
- * @param {string} dir 路径
- * @param {object} result - 存储 GitHub 和 Gitee 仓库的对象
+ * 递归遍历目录以查找 Git 仓库
+ * @param {string} dir - 当前遍历的目录路径
+ * @param {{ github: string[], gitee: string[], gitcode: string[] }} result - 收集结果对象
+ * @returns {Promise<void>}
  */
-async function getGitUrl(dir, result) {
-  const branch = await getRemoteBranch(dir)
-  const remoteUrl = await getRemoteUrl(dir, branch)
-  if (remoteUrl) classifyRepo(remoteUrl, branch, result)
+async function traverse(dir, result) {
+  try {
+    if (await isGitRepo(dir)) {
+      await collectRepoInfo(dir, result)
+    }
+
+    for (const name of await fs.readdir(dir)) {
+      if (IGNORE.has(name)) continue
+      const sub = path.join(dir, name)
+      if ((await fs.stat(sub)).isDirectory()) {
+        await traverse(sub, result)
+      }
+    }
+  } catch (err) {
+    logger.error(`[DF-Plugin] 无法读取目录: ${dir}`, err)
+  }
 }
+
 /**
- * 检查是否为 Git 仓库
- * @param {string} dir - 检查的目录路径
- * @returns {Promise<boolean>} 是否为 Git 仓库
+ * 收集单个仓库的远程信息
+ * @param {string} repoDir - 仓库本地路径
+ * @param {{ github: string[], gitee: string[], gitcode: string[] }} result - 收集结果对象
+ * @returns {Promise<void>}
+ */
+async function collectRepoInfo(repoDir, result) {
+  try {
+    const branch = await execCmd(repoDir, "git branch --show-current")
+    const remoteName = await execCmd(repoDir, `git config branch.${branch}.remote`)
+    const url = await execCmd(repoDir, `git remote get-url ${remoteName}`)
+    classify(url.trim(), branch, result)
+  } catch (err) {
+    logger.warn(`[DF-Plugin] 仓库信息收集失败: ${repoDir}`, err)
+  }
+}
+
+/**
+ * 判断是否为 Git 仓库
+ * @param {string} dir - 待检查目录路径
+ * @returns {Promise<boolean>} 若包含 .git 则返回 true
  */
 async function isGitRepo(dir) {
-  const gitDir = path.join(dir, ".git")
   try {
-    await fs.access(gitDir)
+    await fs.access(path.join(dir, ".git"))
     return true
   } catch {
     return false
@@ -89,76 +100,35 @@ async function isGitRepo(dir) {
 }
 
 /**
- * 获取仓库分支远程 URL
- * @param {string} repoPath - 仓库路径
- * @param {string} branch - 分支名称
- * @returns {Promise<string>} 仓库的远程 URL
+ * 在指定目录执行 shell 命令并返回输出
+ * @param {string} cwd - 命令执行的工作目录
+ * @param {string} cmd - 要执行的命令
+ * @returns {Promise<string>} 命令输出（去除首尾空白）
  */
-async function getRemoteUrl(repoPath, branch) {
-  return executeCommand(`git remote get-url ${await getRemoteName(repoPath, branch)}`, repoPath)
+function execCmd(cwd, cmd) {
+  return new Promise((resolve, reject) => {
+    exec(cmd, { cwd }, (err, out) => err ? reject(err) : resolve(out.trim()))
+  })
 }
 
 /**
- * 获取仓库分支远程名称
- * @param {string} repoPath - 仓库路径
- * @param {string} branch - 分支名称
- * @returns {Promise<string>} 当前分支名称
- */
-async function getRemoteName(repoPath, branch) {
-  return executeCommand(`git config branch.${branch}.remote`, repoPath)
-}
-
-/**
- * 获取仓库当前分支
- * @param {string} repoPath - 仓库路径
- * @returns {Promise<string>} 当前分支名称
- */
-async function getRemoteBranch(repoPath) {
-  return executeCommand("git branch --show-current", repoPath)
-}
-
-/**
- * 根据远程 URL 对仓库进行分类，并将其添加到结果对象中
- * @param {string} url - 仓库的远程 URL
+ * 根据远程 URL 分类仓库平台并保存
+ * @param {string} url - 仓库远程地址
  * @param {string} branch - 当前分支名称
- * @param {object} result - 存储 GitHub 和 Gitee 仓库的对象
+ * @param {{ github: string[], gitee: string[], gitcode: string[] }} result - 收集结果对象
  */
-function classifyRepo(url, branch, result) {
-  if (url.match(/github\.com/i)) {
-    const parts = url.match(/(?:https?:\/\/|git@)github\.com[:/]([^/]+\/[^/.]+)/i)
-    if (parts?.[1]) {
-      const repoPath = parts[1].replace(/\.git$/, "") + `:${branch}`
-      result.github.push(repoPath)
-    }
-  } else if (url.match(/gitee\.com/i)) {
-    const parts = url.match(/(?:https?:\/\/|git@)gitee\.com[:/]([^/]+\/[^/.]+)/i)
-    if (parts?.[1]) {
-      const repoPath = parts[1].replace(/\.git$/, "") + `:${branch}`
-      result.gitee.push(repoPath)
-    }
-  } else if (url.match(/gitcode\.com/i)) {
-    const parts = url.match(/(?:https?:\/\/|git@)gitcode\.com[:/]([^/]+\/[^/.]+)/i)
-    if (parts?.[1]) {
-      const repoPath = parts[1].replace(/\.git$/, "") + `:${branch}`
-      result.gitcode.push(repoPath)
+function classify(url, branch, result) {
+  const hosts = [
+    { key: "github", pattern: /(?:https?:\/\/|git@)github\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i },
+    { key: "gitee", pattern: /(?:https?:\/\/|git@)gitee\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i },
+    { key: "gitcode", pattern: /(?:https?:\/\/|git@)gitcode\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i }
+  ]
+
+  for (const { key, pattern } of hosts) {
+    const m = url.match(pattern)
+    if (m?.groups?.repo) {
+      result[key].push(`${m.groups.repo}:${branch}`)
+      break
     }
   }
-}
-
-/**
- * 在指定的路径下执行命令
- * @param {string} command - 要执行的命令
- * @param {string} cwd - 要在其下执行命令的当前工作目录
- * @returns {Promise<string>} 命令执行结果的输出
- */
-function executeCommand(command, cwd) {
-  return new Promise((resolve, reject) => {
-    exec(command, { cwd }, (error, stdout, stderr) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(stdout.trim())
-      }
-    })
-  })
 }

@@ -1,4 +1,4 @@
-export { PluginPath, getPluginsRepo } from "./GitRepo.js"
+export { PluginPath } from "./GitRepo.js"
 export { default as CodeUpdate } from "./CodeUpdate.js"
 export { default as Summary } from "./summary.js"
 export { randomFile, imagePoke } from "./RandomFile.js"
