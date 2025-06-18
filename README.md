@@ -67,7 +67,6 @@ pnpm install
 
 <details><summary>Git仓库更新推送</summary>
 
-> 在[配置文件](/config/default_config/CodeUpdate.yaml)配置完成填写群号后即可使用。  
 > 推荐使用[锅巴插件](https://gitee.com/guoba-yunzai/guoba-plugin.git)进行配置
 
 - `#检查仓库更新`: 检查有没有仓库更新（相当于主动触发定时逻辑）
@@ -77,7 +76,6 @@ pnpm install
 
 <details><summary>图片外显</summary>
 
-> 配置请看[summary.yaml](./config/default_config/summary.yaml)  
 > 推荐使用[锅巴插件](https://gitee.com/guoba-yunzai/guoba-plugin.git)进行配置
 
 - #开启/关闭图片外显
@@ -93,6 +91,8 @@ pnpm install
 ## ⚙️ 插件配置
 
 本插件已全面兼容[锅巴插件](https://gitee.com/guoba-yunzai/guoba-plugin.git)，推荐使用锅巴插件进行配置。
+
+> 配置文件位于 `Yz/config/DF-Plugin.yaml`
 
 ## 📄 计划工程
 
