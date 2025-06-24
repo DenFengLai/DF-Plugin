@@ -84,12 +84,12 @@ export default [
         },
         {
           field: "AutoPath",
-          label: "获取已安装的插件",
+          label: "自动获取本地仓库和插件",
           component: "Switch"
         },
         {
           field: "Exclude",
-          label: "排除的插件",
+          label: "排除的仓库",
           component: "Select",
           componentProps: {
             allowClear: true,

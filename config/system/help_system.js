@@ -1,6 +1,16 @@
+import { Poke_List } from "#components"
+
 /*
 * 此配置文件为系统使用，请勿修改，否则可能无法正常使用
-* */
+*/
+
+const meme_list = Poke_List.map((i) => {
+  return {
+    "icon": Math.floor(Math.random() * 55) + 1,
+    "title": `#随机${i}`,
+    "desc": i
+  }
+})
 
 export const helpCfg = {
   title: "DF帮助",
@@ -26,23 +36,33 @@ export const helpList = [
     "list": [
       {
         "icon": 2,
-        "title": "戳一戳机器人",
-        "desc": "戳一戳机器人发送随机表情包"
+        "title": "戳一戳",
+        "desc": "打开锅巴查看配置"
       },
       {
         "icon": 4,
         "title": "拾取关键词原神",
         "desc": "本来聊得好好的，突然有人聊起了原神，搞得大家都不高兴"
-      },
-      {
-        "icon": 7,
-        "title": "Git仓库更新推送",
-        "desc": "前往Guoba或插件内配置"
       }
     ]
   },
   {
-    "group": "随机图片类",
+    "group": "Git仓库推送 （使用锅巴进行配置）",
+    "list": [
+      {
+        "icon": 6,
+        "title": "#检查仓库更新",
+        "desc": "检查是否有仓库更新并推送至对应群或人（定时检查同逻辑）"
+      },
+      {
+        "icon": 9,
+        "title": "#推送仓库更新",
+        "desc": "获取所有仓库的最新数据并回复到当前对话（不推送群或人）"
+      }
+    ]
+  },
+  {
+    "group": "随机图片类 (查看更多 #DF表情包列表）",
     "list": [
       {
         "icon": 35,
@@ -73,7 +93,8 @@ export const helpList = [
         "icon": 33,
         "title": "#随机诗歌剧",
         "desc": "曼波"
-      }
+      },
+      ...meme_list
     ]
   },
   {
@@ -125,6 +146,11 @@ export const helpList = [
         "icon": 2,
         "title": "#DF更新图库",
         "desc": "更新戳一戳图库"
+      },
+      {
+        "icon": 14,
+        "title": "#DF版本",
+        "desc": "查看近期版本内容"
       }
     ]
   }

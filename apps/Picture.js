@@ -30,7 +30,7 @@ export class Random_Pictures extends plugin {
   }
 
   async list(e) {
-    return e.reply(`表情包列表：\n${Face_List.join("、")}`, true)
+    return e.reply(`表情包列表：\n${Face_List.join("、")}\n\n使用 #随机+表情名称`, true)
   }
 
   async handleRequest(e) {
