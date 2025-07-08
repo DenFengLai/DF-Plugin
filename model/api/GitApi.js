@@ -1,5 +1,11 @@
 import { request } from "#components"
 
+const GitUrl = {
+  GitHub: "https://api.github.com/repos",
+  Gitee: "https://gitee.com/api/v5/repos",
+  Gitcode: "https://api.gitcode.com/api/v5/repos"
+}
+
 export default new class {
   /**
    * 获取仓库的最新数据
@@ -11,22 +17,13 @@ export default new class {
    * @returns {Promise<object[]>} 提交数据或false（请求失败）
    */
   async getRepositoryData(repo, source, type = "commits", token, sha) {
-    let isGitHub = false, baseURL
-    switch (source) {
-      case "GitHub":
-        isGitHub = true
-        baseURL = "https://api.github.com/repos"
-        break
-      case "Gitee":
-        baseURL = "https://gitee.com/api/v5/repos"
-        break
-      case "Gitcode":
-        baseURL = "https://api.gitcode.com/api/v5/repos"
-        break
-      default:
-        logger.error(`未知数据源: ${source}`)
-        return "return"
+    let isGitHub = false, baseURL = GitUrl[source]
+
+    if (!baseURL) {
+      logger.error(`未知数据源: ${source}`)
+      return "return"
     }
+
     const path = sha ? `${repo}/commits/${sha}` : `${repo}/${type}?per_page=1`
     let url = `${baseURL}/${path}`
 
@@ -47,21 +44,13 @@ export default new class {
    * @returns {Promise<string|false>} 默认分支名或false（请求失败）
    */
   async getDefaultBranch(repo, source, token) {
-    let baseURL
-    switch (source) {
-      case "GitHub":
-        baseURL = "https://api.github.com/repos"
-        break
-      case "Gitee":
-        baseURL = "https://gitee.com/api/v5/repos"
-        break
-      case "Gitcode":
-        baseURL = "https://api.gitcode.com/api/v5/repos"
-        break
-      default:
-        logger.error(`未知数据源: ${source}`)
-        return "return"
+    let baseURL = GitUrl[source]
+
+    if (!baseURL) {
+      logger.error(`未知数据源: ${source}`)
+      return "return"
     }
+
     const url = `${baseURL}/${repo}`
 
     const headers = this.getHeaders(token, source)
