@@ -36,6 +36,7 @@
   },
   "imports": {
     "#components": "./components/index.js",
-    "#model": "./model/index.js"
+    "#model": "./model/index.js",
+    "#lib": "./lib/index.js"
   }
 }

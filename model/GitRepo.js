@@ -2,6 +2,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { exec } from "child_process"
 import { Path, Config } from "#components"
+import { logger } from "#lib"
 
 /**
  * 插件远程路径，包含 GitHub、Gitee 和 GitCode

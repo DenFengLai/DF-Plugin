@@ -2,6 +2,8 @@
 import { Config } from "#components"
 import { GitApi } from "../../api/index.js"
 import { AutoPathBranch } from "../constants.js"
+import { logger } from "#lib"
+
 export async function autoFillDefaultBranches() {
   let num = 0
   const promises = []

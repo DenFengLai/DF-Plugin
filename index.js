@@ -37,6 +37,7 @@
 import Version from "./components/Version.js"
 import { Plugin_Name as AppName } from "#components"
 import { loadApps, logSuccess } from "./lib/load/loadApps.js"
+import { logger } from "#lib"
 
 let apps, loadedFilesCount = 0, loadedFilesCounterr = 0
 

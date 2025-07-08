@@ -4,6 +4,7 @@ import { redisKey } from "../constants.js"
 import { fetchCommits, fetchReleases } from "./repoService.js"
 import { sendMessageToUser } from "./messageService.js"
 import { generateScreenshot } from "./screenshotService.js"
+import { logger } from "#lib"
 
 class UpdateService {
   /**

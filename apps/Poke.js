@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import { imagePoke } from "#model"
 import { Config, Poke_List, Poke_Path } from "#components"
+import { logger } from "#lib"
 
 if (!fs.existsSync(Poke_Path) && Config.other.chuo) logger.mark("[DF-Plugin] 检测到未安装戳一戳图库 将调用XY-Api返回图片")
 

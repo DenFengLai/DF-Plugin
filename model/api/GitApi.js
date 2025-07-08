@@ -1,4 +1,5 @@
 import { request } from "#components"
+import { logger } from "#lib"
 
 const GitUrl = {
   GitHub: "https://api.github.com/repos",

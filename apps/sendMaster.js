@@ -4,6 +4,7 @@ import { common, Config } from "#components"
 import { imagePoke } from "#model"
 import { sendMasterMsg, extractMessageId, getSourceMessage, getMasterQQ } from "../model/sendMasterMsg.js"
 import { segment } from "oicq"
+import { logger } from "#lib"
 
 const key = "DF:contact"
 let Sending = false

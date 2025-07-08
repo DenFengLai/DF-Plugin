@@ -2,6 +2,7 @@ import _ from "lodash"
 import fs from "node:fs"
 import path from "node:path"
 import { Path, Plugin_Name, Plugin_Path } from "../constants/Path.js"
+import { logger } from "#lib"
 
 const getRoot = (root = "") => {
   if (root === "root" || root === "yunzai") {

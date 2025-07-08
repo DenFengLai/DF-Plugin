@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import lodash from "lodash"
 import { Data, Plugin_Path } from "./index.js"
+import { logger } from "#lib"
 
 const CHANGELOG_path = `${Plugin_Path}/CHANGELOG.md`
 const README_path = `${Plugin_Path}/README.md`

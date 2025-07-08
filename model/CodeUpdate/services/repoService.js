@@ -3,6 +3,7 @@ import redisHeler from "../utils/redisHelper.js"
 import { formatCommitInfo, formatReleaseInfo } from "./formatService.js"
 import { GitApi } from "../../api/index.js"
 import { AutoPathBranch } from "../constants.js"
+import { logger } from "#lib"
 
 /**
  * 获取指定仓库列表的提交记录。

@@ -17,7 +17,7 @@ module.exports = {
   globals: {
     Bot: true,
     redis: true,
-    logger: true,
+    // logger: true,
     plugin: true,
     segment: true
   },
@@ -46,7 +46,8 @@ module.exports = {
       "custom-alias": {
         alias: {
           "#components": "./components/index.js",
-          "#model": "./model/index.js"
+          "#model": "./model/index.js",
+          "#lib": "./lib/index.js"
         },
         extensions: [ ".js", ".json", ".jsx", ".ts", ".tsx" ]
       }
