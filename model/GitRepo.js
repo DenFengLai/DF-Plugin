@@ -18,16 +18,16 @@ if (Config.AutoPath) loadLocalPlugins()
  * @returns {Promise<void>}
  */
 async function loadLocalPlugins() {
-  console.time("[DF-Plugin] 载入本地Git仓库列表")
+  console.time(" 载入本地Git仓库列表")
   try {
     const { github, gitee, gitcode } = await findRepos(Path)
     PluginPath.github.push(...github)
     PluginPath.gitee.push(...gitee)
     PluginPath.gitcode.push(...gitcode)
   } catch (err) {
-    logger.error("[DF-Plugin] 加载本地插件时出错:", err)
+    logger.error(" 加载本地插件时出错:", err)
   } finally {
-    console.timeEnd("[DF-Plugin] 载入本地Git仓库列表")
+    console.timeEnd(" 载入本地Git仓库列表")
   }
 }
 
@@ -65,7 +65,7 @@ async function traverse(dir, result) {
       }
     }
   } catch (err) {
-    logger.error(`[DF-Plugin] 无法读取目录: ${dir}`, err)
+    logger.error(` 无法读取目录: ${dir}`, err)
   }
 }
 
@@ -82,7 +82,7 @@ async function collectRepoInfo(repoDir, result) {
     const url = await execCmd(repoDir, `git remote get-url ${remoteName}`)
     classify(url.trim(), branch, result)
   } catch (err) {
-    logger.warn(`[DF-Plugin] 仓库信息收集失败: ${repoDir}`, err)
+    logger.warn(` 仓库信息收集失败: ${repoDir}`, err)
   }
 }
 

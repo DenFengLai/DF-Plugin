@@ -17,7 +17,7 @@ class UpdateService {
     const { GithubToken = "", GiteeToken = "", GitcodeToken = "", List = [] } = Config.CodeUpdate
 
     if (!List.length) {
-      logger.mark("[DF-Plugin][CodeUpdate] 未配置仓库信息，取消检查更新")
+      logger.mark("[CodeUpdate] 未配置仓库信息，取消检查更新")
       return isAuto ? false : e.reply("还没有配置仓库信息呢")
     }
 
