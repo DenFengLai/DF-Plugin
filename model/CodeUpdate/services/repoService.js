@@ -27,7 +27,7 @@ export const fetchCommits = (repoList, source, token, redisKeyPrefix, isAuto) =>
  * @returns {Promise<object[]>} 处理后的更新信息数组。
  */
 export const fetchReleases = (repoList, source, token, redisKeyPrefix, isAuto) =>
-  fetchUpdates(repoList, source, token, "rebase", redisKeyPrefix, isAuto)
+  fetchUpdates(repoList, source, token, "releases", redisKeyPrefix, isAuto)
 
 /**
  * 从仓库列表中获取更新（提交或发布），并进行处理。
