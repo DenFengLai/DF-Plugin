@@ -46,7 +46,7 @@ export class Random_Pictures extends plugin {
     } else if (msg.includes("白丝")) {
       let link = ((await request.get("https://v2.api-m.com/api/baisi", { responseType: "json" })).data).replace(/\\/g, "/")
       response = [ "白丝来咯~", segment.image(link) ]
-    } else if (msg.includes("cos")) {
+    } else if (/cos/i.test(msg)) {
       const link = (await request.get("https://api.suyanw.cn/api/cos.php?type=json")).text.replace(/\\/g, "/")
       response = [ "cos来咯~", segment.image(link) ]
     } else if (msg.includes("腿")) {
