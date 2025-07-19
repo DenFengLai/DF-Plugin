@@ -10,7 +10,7 @@ export class Random_Pictures extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#?(来张|看看|随机)([jJ][kK]|制服(小姐姐)?|黑丝|[Cc][Oo][Ss]|腿子?)$",
+          reg: "^#?(来张|看看|随机)([jJ][kK]|制服(小姐姐)?|黑丝|白丝|[Cc][Oo][Ss]|腿子?)$",
           fnc: "handleRequest"
         },
         {
@@ -43,6 +43,9 @@ export class Random_Pictures extends plugin {
       response = [ segment.image("https://api.suyanw.cn/api/jk.php") ]
     } else if (msg.includes("黑丝")) {
       response = [ "唉嗨害，黑丝来咯", segment.image("https://api.suyanw.cn/api/hs.php") ]
+    } else if (msg.includes("白丝")) {
+      let link = ((await request.get("https://v2.api-m.com/api/baisi", { responseType: "json" })).data).replace(/\\/g, "/")
+      response = [ "白丝来咯~", segment.image(link) ]
     } else if (msg.includes("cos")) {
       const link = (await request.get("https://api.suyanw.cn/api/cos.php?type=json")).text.replace(/\\/g, "/")
       response = [ "cos来咯~", segment.image(link) ]
