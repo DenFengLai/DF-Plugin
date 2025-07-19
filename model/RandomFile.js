@@ -13,13 +13,13 @@ function randomFile(dirPath) {
   try {
     const files = fs.readdirSync(dirPath)
     if (files.length === 0) {
-      logger.error(`[DF-Plugin] 获取文件失败: ${dirPath}`)
+      logger.error(` 获取文件失败: ${dirPath}`)
       return null
     }
     const fileName = lodash.sample(files)
     return path.join(dirPath, fileName)
   } catch (err) {
-    logger.error(`[DF-Plugin] 获取文件错误: ${dirPath}\n${err}`)
+    logger.error(` 获取文件错误: ${dirPath}\n${err}`)
     return null
   }
 }

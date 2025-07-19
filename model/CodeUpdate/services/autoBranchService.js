@@ -29,7 +29,7 @@ export async function autoFillDefaultBranches() {
                 num++
               })
               .catch((error) => {
-                logger.warn(`[DF-Plugin] 获取${platform}的默认分支失败 ${repo}: ${error.message}`)
+                logger.warn(` 获取${platform}的默认分支失败 ${repo}: ${error.message}`)
               })
           )
         }
@@ -40,9 +40,9 @@ export async function autoFillDefaultBranches() {
   try {
     await Promise.all(promises)
     if (num > 0) {
-      logger.info(`[DF-Plugin] 已自动获取到 ${logger.blue(num)} 个默认分支`)
+      logger.info(` 已自动获取到 ${logger.blue(num)} 个默认分支`)
     }
   } catch (error) {
-    logger.error(`[DF-Plugin] 获取默认分支时发生错误: ${error.message}`)
+    logger.error(` 获取默认分支时发生错误: ${error.message}`)
   }
 }
