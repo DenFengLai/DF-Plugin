@@ -33,6 +33,12 @@ git clone --depth=1 https://github.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plu
 git clone --depth=1 https://gitee.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
 ```
 
+- 使用Gitcode
+
+```sh
+git clone --depth=1 https://gitcode.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
+```
+
 ### 🔧 安装依赖
 
 ```sh
@@ -61,7 +67,7 @@ pnpm install
 
 > 戳一戳返回随机表情包  
 > 使用 #DF安装图库 可安装图库到本地使用  
-> 未安装图库将调用[XY-Api](https://api.yugan.love/)
+> 未安装图库将调用[XY-Api](https://ciallo.ciallo.pro/)
 
 </details>
 
@@ -174,5 +180,5 @@ pnpm install
 
 ## 🎁 特别鸣谢
 
-- [XY-Api](https://api.yugan.love/)：提供戳一戳图片接口服务支持
+- [XY-Api](https://ciallo.ciallo.pro/)：提供戳一戳图片接口服务支持
 - [素颜Api](https://api.suyanw.cn)：提供部分Api服务
