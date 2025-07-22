@@ -43,7 +43,7 @@ async function findRepos(rootDir) {
 }
 
 // 忽略的目录列表
-const IGNORE = new Set([ "data", "node_modules" ])
+const IGNORE = new Set(["data", "node_modules", "temp"])
 
 /**
  * 递归遍历目录以查找 Git 仓库
