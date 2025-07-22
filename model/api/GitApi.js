@@ -34,7 +34,7 @@ export default new class {
 
     const headers = this.getHeaders(token, source)
     const data = await this.fetchData(url, headers, repo, source)
-    return data
+    return data || "return"
   }
 
   /**
@@ -49,17 +49,18 @@ export default new class {
 
     if (!baseURL) {
       logger.error(`未知数据源: ${source}`)
-      return "return"
+      return false
     }
 
     const url = `${baseURL}/${repo}`
 
     const headers = this.getHeaders(token, source)
     const data = await this.fetchData(url, headers, repo, source)
-    if (data && data.default_branch) {
-      return data.default_branch
+    if (data) {
+      return data?.default_branch
+    } else {
+      return "return"
     }
-    return false
   }
 
   /**
@@ -108,32 +109,32 @@ export default new class {
         switch (response.status) {
           case 401:
             msg = "访问令牌无效或已过期 (code: 401)"
-            return "return"
+            break
           case 403:
             msg = "请求达到Api速率限制或无权限，请尝试填写token或降低请求频率后重试 (code: 403)"
-            return "return"
+            break
           case 404:
             msg = "仓库不存在 (code: 404)"
-            return "return"
+            break
           default:
             msg = `状态码：${response.status}`
             break
         }
 
         logger.error(`请求 ${logger.magenta(source)} 失败: ${logger.cyan(repo)}, ${msg}`)
-        return "return"
+        return false
       }
 
       const contentType = response.headers.get("content-type")
       if (!contentType || !contentType.includes("application/json")) {
         logger.error(`响应非 JSON 格式: ${url} , 内容：${await response.text()}`)
-        return "return"
+        return false
       }
 
       return await response.json()
     } catch (error) {
       logger.error(`请求失败: ${url}，错误信息: ${error.stack}`)
-      return "return"
+      return false
     }
   }
 }()
