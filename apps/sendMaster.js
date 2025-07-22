@@ -120,7 +120,7 @@ export class SendMasterMsgs extends plugin {
         MsgID = extractMessageId(source.raw_message)
       } else {
         const regRet = ReplyReg.exec(e.msg)
-        if (!regRet[1]) return logger.warn("[DF-Plugin] 未找到消息ID")
+        if (!regRet[1]) return logger.warn(" 未找到消息ID")
         else {
           MsgID = regRet[1].trim()
           isInput = true
@@ -141,7 +141,7 @@ export class SendMasterMsgs extends plugin {
       return e.reply("✅ 消息已送达")
     } catch (err) {
       e.reply("❎ 发生错误，请查看控制台日志")
-      logger.error("[DF-Plugin]回复消息时发生错误：", err)
+      logger.error("回复消息时发生错误：", err)
       return false
     }
   }

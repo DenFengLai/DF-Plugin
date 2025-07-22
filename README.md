@@ -33,6 +33,12 @@ git clone --depth=1 https://github.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plu
 git clone --depth=1 https://gitee.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
 ```
 
+- 使用Gitcode
+
+```sh
+git clone --depth=1 https://gitcode.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
+```
+
 ### 🔧 安装依赖
 
 ```sh
@@ -61,7 +67,7 @@ pnpm install
 
 > 戳一戳返回随机表情包  
 > 使用 #DF安装图库 可安装图库到本地使用  
-> 未安装图库将调用[XY-Api](https://api.yugan.love/)
+> 未安装图库将调用[XY-Api](https://ciallo.ciallo.pro/)
 
 </details>
 
@@ -107,7 +113,7 @@ pnpm install
 ## ✨ 贡献者
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些了不起的人 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -128,6 +134,7 @@ pnpm install
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lovely-02"><img src="https://avatars.githubusercontent.com/u/83761116?v=4?s=100" width="100px;" alt="02"/><br /><sub><b>02</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=Lovely-02" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MapleLeaf2007"><img src="https://avatars.githubusercontent.com/u/122816807?v=4?s=100" width="100px;" alt="MapleLeaf"/><br /><sub><b>MapleLeaf</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=MapleLeaf2007" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
@@ -174,5 +181,5 @@ pnpm install
 
 ## 🎁 特别鸣谢
 
-- [XY-Api](https://api.yugan.love/)：提供戳一戳图片接口服务支持
+- [XY-Api](https://ciallo.ciallo.pro/)：提供戳一戳图片接口服务支持
 - [素颜Api](https://api.suyanw.cn)：提供部分Api服务
