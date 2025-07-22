@@ -43,7 +43,7 @@ async function findRepos(rootDir) {
 }
 
 // 忽略的目录列表
-const IGNORE = new Set([ "data", "node_modules" ])
+const IGNORE = new Set([ "data", "node_modules", "temp", "logs", "cache", "dist" ])
 
 /**
  * 递归遍历目录以查找 Git 仓库
@@ -57,15 +57,15 @@ async function traverse(dir, result) {
       await collectRepoInfo(dir, result)
     }
 
-    for (const name of await fs.readdir(dir)) {
-      if (IGNORE.has(name)) continue
-      const sub = path.join(dir, name)
-      if ((await fs.stat(sub)).isDirectory()) {
+    for (const dirent of await fs.readdir(dir, { withFileTypes: true })) {
+      if (IGNORE.has(dirent.name)) continue
+      const sub = path.join(dir, dirent.name)
+      if (dirent.isDirectory()) {
         await traverse(sub, result)
       }
     }
   } catch (err) {
-    logger.error(` 无法读取目录: ${dir}`, err)
+    logger.error(`无法扫描文件夹: ${dir}`, err)
   }
 }
 
