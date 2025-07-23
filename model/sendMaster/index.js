@@ -1,5 +1,5 @@
 import { Config } from "#components"
-import common from "../../../lib/common/common.js"
+import common from "../../../../lib/common/common.js"
 
 /**
  * 发送主人消息

@@ -1,4 +1,4 @@
-import { PluginPath } from "../../GitRepo.js"
+import { PluginPath } from "../../GitRepo/index.js"
 import { Config } from "#components"
 import { redisKey } from "../constants.js"
 import { fetchCommits, fetchReleases } from "./repoService.js"

@@ -1,6 +1,9 @@
-import { imagePoke as RandomFace } from "#model"
-import { Config, Poke_List as Face_List, request } from "#components"
+import { imagePoke as RandomFace, apiHandlers } from "#model"
+import { Config, Poke_List as Face_List } from "#components"
+import _ from "lodash"
 
+const PictureRegx = new RegExp(`^#?(?:来张|看看|随机)(${apiHandlers.map(handler => handler.reg).join("|")})$`, "i")
+const FaceRegx = new RegExp(`^#?(?:来张|看看|随机)(${Face_List.join("|")})$`, "i")
 export class Random_Pictures extends plugin {
   constructor() {
     super({
@@ -10,12 +13,12 @@ export class Random_Pictures extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#?(来张|看看|随机)([jJ][kK]|制服(小姐姐)?|黑丝|白丝|[Cc][Oo][Ss]|腿子?)$",
+          reg: PictureRegx,
           fnc: "handleRequest"
         },
         {
-          reg: `^#?(随机|来张)?(${Face_List.join("|")})$`,
-          fnc: "handleRequest"
+          reg: FaceRegx,
+          fnc: "FaceRequest"
         },
         {
           reg: "^#?[Dd][Ff](随机)?表情包?列表$",
@@ -36,34 +39,25 @@ export class Random_Pictures extends plugin {
   async handleRequest(e) {
     if (!this.open) return false
 
-    const msg = e.msg
-    let response = []
+    const type = PictureRegx.exec(e.msg)?.[1]?.toLowerCase()
+    const message = await (apiHandlers.find(handler => new RegExp(handler.reg, "i").test(type))
+    ).fnc()
 
-    if (msg.includes("jk") || msg.includes("制服")) {
-      response = [ segment.image("https://api.suyanw.cn/api/jk.php") ]
-    } else if (msg.includes("黑丝")) {
-      response = [ "唉嗨害，黑丝来咯", segment.image("https://api.suyanw.cn/api/hs.php") ]
-    } else if (msg.includes("白丝")) {
-      let link = ((await request.get("https://v2.api-m.com/api/baisi", { responseType: "json" })).data).replace(/\\/g, "/")
-      response = [ "白丝来咯~", segment.image(link) ]
-    } else if (/cos/i.test(msg)) {
-      const link = (await request.get("https://api.suyanw.cn/api/cos.php?type=json")).text.replace(/\\/g, "/")
-      response = [ "cos来咯~", segment.image(link) ]
-    } else if (msg.includes("腿")) {
-      const link = (await request.get("https://api.suyanw.cn/api/meitui.php", { responseType: "text" })).match(/https?:\/\/[^ ]+/)?.[0]
-      response = [ "看吧涩批！", segment.image(link) ]
-    } else if (msg.includes("随机") || msg.includes("来张") || Config.Picture.Direct) {
-      const name = msg.replace(/#|随机|来张/g, "")
-      const file = RandomFace(name)
-      if (file) {
-        response = [ segment.image(file) ]
-      }
-    } else {
-      return false
+    if (!_.isEmpty(message)) {
+      return e.reply(message, true)
     }
 
-    if (response.length > 0) {
-      return e.reply(response, true)
+    return false
+  }
+
+  async FaceRequest(e) {
+    if (!this.open) return false
+
+    const type = FaceRegx.exec(e.msg)
+    const face = type[1].toLowerCase()
+
+    if (Face_List.includes(face)) {
+      return e.reply(segment.image(RandomFace(face)), true)
     }
 
     return false
