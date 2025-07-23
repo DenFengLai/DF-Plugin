@@ -4,6 +4,7 @@ import _ from "lodash"
 
 const PictureRegx = new RegExp(`^#?(?:来张|看看|随机)(${apiHandlers.map(handler => handler.reg).join("|")})$`, "i")
 const FaceRegx = new RegExp(`^#?(?:来张|看看|随机)(${Face_List.join("|")})$`, "i")
+
 export class Random_Pictures extends plugin {
   constructor() {
     super({
@@ -21,7 +22,7 @@ export class Random_Pictures extends plugin {
           fnc: "FaceRequest"
         },
         {
-          reg: "^#?[Dd][Ff](随机)?表情包?列表$",
+          reg: /^#?DF(随机)?表情包?列表$/i,
           fnc: "list"
         }
       ]

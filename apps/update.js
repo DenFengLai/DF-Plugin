@@ -3,7 +3,7 @@ import { exec } from "node:child_process"
 import { update as Update } from "../../other/update.js"
 import { Plugin_Name, Plugin_Path, Poke_Path } from "#components"
 
-let lock = false // 儿童锁(bushi)
+let lock = false
 
 export class DFupdate extends plugin {
   constructor() {
@@ -13,11 +13,11 @@ export class DFupdate extends plugin {
       priority: 1000,
       rule: [
         {
-          reg: "^#[Dd][Ff](插件)?(强制)?更新(日志)?$",
+          reg: /^#DF(插件)?(强制)?更新(日志)?$/i,
           fnc: "update"
         },
         {
-          reg: "^#?[Dd][Ff](安装|(强制)?更新)(戳一戳)?图库$",
+          reg: /^#?DF(安装|(强制)?更新)(戳一戳)?图库$/i,
           fnc: "up_img"
         }
       ]
