@@ -1,9 +1,12 @@
-# DF-Plugin
+![DF-Plugin](https://socialify.git.ci/DenFengLai/DF-Plugin/image?custom_language=JavaScript&description=1&font=Raleway&language=1&name=1&pattern=Plus&theme=Auto)
 
-适用于Miao-Yunzai和TRSS-Yunzai的拓展插件。
+[![Gitee stars](https://gitee.com/DenFengLai/DF-Plugin/badge/star.svg?theme=dark)](https://gitee.com/DenFengLai/DF-Plugin/stargazers)
+[![Gitee forks](https://gitee.com/DenFengLai/DF-Plugin/badge/fork.svg?theme=dark)](https://gitee.com/DenFengLai/DF-Plugin/members)
+[![GitHub stars](https://img.shields.io/github/stars/DenFengLai/DF-Plugin)](https://github.com/DenFengLai/DF-Plugin/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/DenFengLai/DF-Plugin)](https://github.com/DenFengLai/DF-Plugin/network)
+![GitHub repo size](https://img.shields.io/github/repo-size/denfenglai/DF-Plugin)
 
 ![Nodejs](https://img.shields.io/badge/-Node.js-3C873A?style=flat&logo=Node.js&logoColor=white)
-![JavaScript](https://img.shields.io/badge/-JavaScript-eed718?style=flat&logo=javascript&logoColor=ffffff)
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
 [![license](https://img.shields.io/github/license/Denfenglai/DF-Plugin.svg?style=flat&logo=gnu)](https://github.com/Denfenglai/DF-Plugin/blob/master/LICENSE)
 
@@ -11,29 +14,22 @@
 [![Miao-Yunzai V3](https://img.shields.io/github/package-json/v/yoimiya-kokomi/Miao-Yunzai?label=Miao-Yunzai&color=yellow)](https://github.com/yoimiya-kokomi/Miao-Yunzai)
 [![TRSS-Yunzai](https://img.shields.io/github/package-json/v/TimeRainStarSky/Yunzai?label=TRSS-Yunzai&color=blue)](https://github.com/TimeRainStarSky/Yunzai)
 
-[![Gitee stars](https://gitee.com/DenFengLai/DF-Plugin/badge/star.svg?theme=dark)](https://gitee.com/DenFengLai/DF-Plugin/stargazers)
-[![Gitee forks](https://gitee.com/DenFengLai/DF-Plugin/badge/fork.svg?theme=dark)](https://gitee.com/DenFengLai/DF-Plugin/members)
-[![GitHub stars](https://img.shields.io/github/stars/DenFengLai/DF-Plugin)](https://github.com/DenFengLai/DF-Plugin/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/DenFengLai/DF-Plugin)](https://github.com/DenFengLai/DF-Plugin/network)
-![GitHub repo size](https://img.shields.io/github/repo-size/denfenglai/DF-Plugin?label=%E4%BB%93%E5%BA%93%E5%A4%A7%E5%B0%8F)
-
-[![Fork me on Gitee](https://gitee.com/DenFengLai/DF-Plugin/widgets/widget_6.svg)](https://gitee.com/DenFengLai/DF-Plugin)
 
 ## 💡 安装教程
 
-- 使用Github
+- Github
 
 ```sh
 git clone --depth=1 https://github.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
 ```
 
-- 使用Gitee
+- Gitee
 
 ```sh
 git clone --depth=1 https://gitee.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
 ```
 
-- 使用Gitcode
+- Gitcode
 
 ```sh
 git clone --depth=1 https://gitcode.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
@@ -42,7 +38,7 @@ git clone --depth=1 https://gitcode.com/DenFengLai/DF-Plugin.git ./plugins/DF-Pl
 ### 🔧 安装依赖
 
 ```sh
-pnpm install
+pnpm install -P
 ```
 
 ## 🤗 已实现的功能
@@ -50,6 +46,7 @@ pnpm install
 <details><summary>随机图片</summary>
 
 - #来张JK / 黑丝 / cos / 腿子 / 丛雨 /诗歌剧
+- #DF随机表情列表
 
 > 随机发送一张图片
 
