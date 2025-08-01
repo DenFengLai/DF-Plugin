@@ -99,7 +99,7 @@ sendMaster:
 
   cdTips: |-
     联系主人CD 单位：秒 填0关闭cd
-  cd: 300
+  cd: 30
 
   MasterTips: |-
     是否发送全部主人 0：仅发送首个主人 1：发送全部主人 

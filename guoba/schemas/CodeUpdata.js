@@ -1,5 +1,33 @@
 import { PluginPath } from "#model"
 
+const _ = (a, b) => {
+  return {
+    field: a,
+    label: `${b}仓库路径`,
+    bottomHelpMessage: "格式：所有者/存储库:分支, 如: github.com/DenFengLai/DF-Plugin 则填 DenFengLai/DF-Plugin",
+    component: "GTags",
+    componentProps: {
+      allowAdd: true,
+      allowDel: true,
+      showPrompt: true,
+      promptProps: {
+        content: "请输入 所有者/存储库:分支",
+        placeholder: "请输入仓库路径",
+        okText: "添加",
+        rules: [
+          {
+            required: true, message: "不可以为空哦"
+          },
+          {
+            pattern: "^([\\w-]+)\\/([\\w.-]+)(?::([\\w.-]+))?$",
+            message: "格式不正确，请使用 所有者/存储库:分支 的格式"
+          }
+        ]
+      }
+    }
+  }
+}
+
 export default [
   {
     component: "SOFT_GROUP_BEGIN",
@@ -99,91 +127,11 @@ export default [
             }
           }
         },
-        {
-          field: "GithubList",
-          label: "Github仓库路径",
-          bottomHelpMessage: "格式：用户名/仓库名:分支名，如: github.com/DenFengLai/DF-Plugin 则填 DenFengLai/DF-Plugin",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true
-          },
-          showPrompt: true,
-          promptProps: {
-            content: "请输入 所有者/存储库:分支",
-            placeholder: "请输入仓库路径",
-            okText: "添加",
-            rules: [ { required: true, message: "不可以为空哦" } ]
-          }
-        },
-        {
-          field: "GithubReleases",
-          label: "Github发行版仓库路径",
-          bottomHelpMessage: "格式：所有者/存储库:分支",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true
-          },
-          showPrompt: true,
-          promptProps: {
-            content: "请输入 所有者/存储库:分支",
-            placeholder: "请输入仓库路径",
-            okText: "添加",
-            rules: [ { required: true, message: "不可以为空哦" } ]
-          }
-        },
-        {
-          field: "GiteeList",
-          label: "Gitee仓库路径",
-          bottomHelpMessage: "格式：所有者/存储库:分支",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true
-          },
-          showPrompt: true,
-          promptProps: {
-            content: "请输入 所有者/存储库:分支",
-            placeholder: "请输入仓库路径",
-            okText: "添加",
-            rules: [ { required: true, message: "不可以为空哦" } ]
-          }
-        },
-        {
-          field: "GiteeReleases",
-          label: "Gitee发行版仓库路径",
-          bottomHelpMessage: "格式：所有者/存储库:分支",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true
-          },
-          showPrompt: true,
-          promptProps: {
-            content: "请输入 所有者/存储库:分支",
-            placeholder: "请输入仓库路径",
-            okText: "添加",
-            rules: [ { required: true, message: "不可以为空哦" } ]
-          }
-        },
-        {
-          field: "GitcodeList",
-          label: "Gitcode仓库路径",
-          bottomHelpMessage: "格式：所有者/存储库:分支",
-          component: "GTags",
-          componentProps: {
-            allowAdd: true,
-            allowDel: true
-          },
-          showPrompt: true,
-          promptProps: {
-            content: "请输入 所有者/存储库:分支",
-            placeholder: "请输入仓库路径",
-            okText: "添加",
-            rules: [ { required: true, message: "不可以为空哦" } ]
-          }
-        },
+        _("GithubList", "Github"),
+        _("GithubReleases", "Github发行版"),
+        _("GiteeList", "Gitee"),
+        _("GiteeReleases", "Gitee发行版"),
+        _("GitcodeList", "Gitcode"),
         {
           field: "note",
           label: "备注",
