@@ -26,7 +26,8 @@ let Poke_List = [
   "冬川花璃",
   "neuro",
   "kipfel",
-  "mygo"
+  "mygo",
+  "猫猫收藏家"
 ]
 
 /**
