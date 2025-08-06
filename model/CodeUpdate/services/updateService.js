@@ -58,31 +58,39 @@ class UpdateService {
       Group = [],
       QQ = []
     } = repoConfig
-    const repoList = {}
-    repos.forEach(({ provider, repo, branch, type }) => {
-      const typeKey = type === "commit" ? "commits" : "releases"
-      const repoWithBranch = branch ? `${repo}:${branch}` : repo
 
-      repoList[provider] ??= {}
-      repoList[provider][typeKey] ??= []
-      repoList[provider][typeKey].push(repoWithBranch)
-    })
-    // const githubRepos = this.getRepoList(GithubList, PluginPath.github, Exclude, AutoPath)
-    // const giteeRepos = this.getRepoList(GiteeList, PluginPath.gitee, Exclude, AutoPath)
-    // const gitcodeRepos = this.getRepoList(GitcodeList, PluginPath.gitcode, Exclude, AutoPath)
+    const repoList = {}
+
+    if (repos.length > 0) {
+    // 用户配置了 repos
+      repos.forEach(({ provider, repo, branch, type }) => {
+        const typeKey = type === "commit" ? "commits" : "releases"
+        const repoWithBranch = branch ? `${repo}:${branch}` : repo
+
+        repoList[provider] ??= {}
+        repoList[provider][typeKey] ??= []
+        repoList[provider][typeKey].push(repoWithBranch)
+      })
+    } else if (AutoPath) {
+    // 用户没有配置 repos，走自动路径逻辑
+      for (const provider of Object.keys(PluginPath)) {
+        repoList[provider] = {
+          commits: this.getRepoList([], PluginPath[provider], Exclude, AutoPath)
+        }
+      }
+    }
 
     const updateRequests = []
 
     Object.entries(repoList).forEach(([ provider, types ]) => {
       Object.entries(types).forEach(([ type, repos ]) => {
         const key =
-      type === "commits"
-        ? provider
-        : `${provider}${type[0].toUpperCase()}${type.slice(1)}` // e.g. GitHub + releases → GithubReleases
+        type === "commits"
+          ? provider
+          : `${provider}${type[0]}${type.slice(1)}`
 
         updateRequests.push({
-          // repos,
-          repos: this.getRepoList(repos, PluginPath?.[provider.toLowerCase()], Exclude, AutoPath),
+          repos: this.getRepoList(repos, PluginPath?.[provider], Exclude, AutoPath),
           platform: provider,
           token: tokens[provider],
           type,
@@ -91,19 +99,19 @@ class UpdateService {
       })
     })
 
-    console.log(updateRequests)
-
     const promises = updateRequests
       .filter(req => req.repos.length > 0)
       .map(req => this.fetchUpdateForRepo(req.repos, req.platform, req.token, req.type, req.key, isAuto))
 
     const results = await Promise.all(promises)
     const content = results.flat()
+
     if (content.length > 0) {
       const userId = isAuto ? "Auto" : e.user_id
       const base64 = await generateScreenshot(content, userId)
       sendMessageToUser(base64, content, Group, QQ, isAuto, e)
     }
+
     return content.length
   }
 

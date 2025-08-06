@@ -6,9 +6,9 @@ import { logger } from "#lib"
 
 /**
  * 插件远程路径，包含 GitHub、Gitee 和 GitCode
- * @type {{ github: string[], gitee: string[], gitcode: string[] }}
+ * @type {{ GitHub: string[], Gitee: string[], Gitcode: string[] }}
  */
-export const PluginPath = { github: [], gitee: [], gitcode: [] }
+export const PluginPath = { GitHub: [], Gitee: [], Gitcode: [] }
 
 // 初始化常量
 if (Config.AutoPath) loadLocalPlugins()
@@ -21,9 +21,9 @@ async function loadLocalPlugins() {
   console.time("[DF-Plugin] 载入本地Git仓库列表")
   try {
     const { github, gitee, gitcode } = await findRepos(Path)
-    PluginPath.github.push(...github)
-    PluginPath.gitee.push(...gitee)
-    PluginPath.gitcode.push(...gitcode)
+    PluginPath.GitHub.push(...github)
+    PluginPath.Gitee.push(...gitee)
+    PluginPath.Gitcode.push(...gitcode)
   } catch (err) {
     logger.error("加载本地Git仓库时出错:", err)
   } finally {
