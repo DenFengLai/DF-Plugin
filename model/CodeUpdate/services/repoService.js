@@ -73,7 +73,7 @@ async function fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAut
         : formatReleaseInfo(data[0], source, repo)
       content.push(info)
     } catch (error) {
-      logger.error(` 获取 ${logger.magenta(source)} ${type} ${logger.cyan(repo)} 数据出错: ${error?.stack || error}`)
+      logger.error(`获取 ${logger.magenta(source)} ${type} ${logger.cyan(repo)} 数据出错: ${error?.stack || error}`)
     }
   }))
   return content

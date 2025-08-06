@@ -14,7 +14,7 @@ class UpdateService {
    * @returns {boolean|object} 是否有更新 | { number: number }
    */
   async checkUpdates(isAuto = false, e) {
-    const { GithubToken = "", GiteeToken = "", GitcodeToken = "", List = [] } = Config.CodeUpdate
+    const { List = [], repos = [] } = Config.CodeUpdate
 
     if (!List.length) {
       logger.mark("[CodeUpdate] 未配置仓库信息，取消检查更新")
@@ -22,10 +22,14 @@ class UpdateService {
     }
 
     logger.mark(logger.blue("开始检查仓库更新"))
+    const tokens = repos.reduce((acc, item) => {
+      acc[item.provider] = item.token
+      return acc
+    }, {})
     let totalUpdates = 0
 
     for (const repoConfig of List) {
-      const updates = await this.checkRepoConfigUpdates(repoConfig, { GithubToken, GiteeToken, GitcodeToken }, isAuto, e)
+      const updates = await this.checkRepoConfigUpdates(repoConfig, tokens, isAuto, e)
       totalUpdates += updates
     }
 
@@ -48,28 +52,46 @@ class UpdateService {
    */
   async checkRepoConfigUpdates(repoConfig, tokens, isAuto, e) {
     const {
-      GithubList = [],
-      GiteeList = [],
-      GitcodeList = [],
-      GiteeReleases = [],
-      GithubReleases = [],
       AutoPath = false,
+      repos = [],
       Exclude = [],
       Group = [],
       QQ = []
     } = repoConfig
+    const repoList = {}
+    repos.forEach(({ provider, repo, branch, type }) => {
+      const typeKey = type === "commit" ? "commits" : "releases"
+      const repoWithBranch = branch ? `${repo}:${branch}` : repo
 
-    const githubRepos = this.getRepoList(GithubList, PluginPath.github, Exclude, AutoPath)
-    const giteeRepos = this.getRepoList(GiteeList, PluginPath.gitee, Exclude, AutoPath)
-    const gitcodeRepos = this.getRepoList(GitcodeList, PluginPath.gitcode, Exclude, AutoPath)
+      repoList[provider] ??= {}
+      repoList[provider][typeKey] ??= []
+      repoList[provider][typeKey].push(repoWithBranch)
+    })
+    // const githubRepos = this.getRepoList(GithubList, PluginPath.github, Exclude, AutoPath)
+    // const giteeRepos = this.getRepoList(GiteeList, PluginPath.gitee, Exclude, AutoPath)
+    // const gitcodeRepos = this.getRepoList(GitcodeList, PluginPath.gitcode, Exclude, AutoPath)
 
-    const updateRequests = [
-      { repos: githubRepos, platform: "GitHub", token: tokens.GithubToken, type: "commits", key: "GitHub" },
-      { repos: giteeRepos, platform: "Gitee", token: tokens.GiteeToken, type: "commits", key: "Gitee" },
-      { repos: gitcodeRepos, platform: "Gitcode", token: tokens.GitcodeToken, type: "commits", key: "Gitcode" },
-      { repos: GiteeReleases, platform: "Gitee", token: tokens.GiteeToken, type: "releases", key: "GiteeReleases" },
-      { repos: GithubReleases, platform: "GitHub", token: tokens.GithubToken, type: "releases", key: "GithubReleases" }
-    ]
+    const updateRequests = []
+
+    Object.entries(repoList).forEach(([ provider, types ]) => {
+      Object.entries(types).forEach(([ type, repos ]) => {
+        const key =
+      type === "commits"
+        ? provider
+        : `${provider}${type[0].toUpperCase()}${type.slice(1)}` // e.g. GitHub + releases → GithubReleases
+
+        updateRequests.push({
+          // repos,
+          repos: this.getRepoList(repos, PluginPath?.[provider.toLowerCase()], Exclude, AutoPath),
+          platform: provider,
+          token: tokens[provider],
+          type,
+          key
+        })
+      })
+    })
+
+    console.log(updateRequests)
 
     const promises = updateRequests
       .filter(req => req.repos.length > 0)
@@ -85,7 +107,7 @@ class UpdateService {
     return content.length
   }
 
-  getRepoList(list, pluginPath, exclude, autoPath) {
+  getRepoList(list, pluginPath = [], exclude, autoPath) {
     if (!autoPath) return list
     return [ ...new Set([ ...list, ...pluginPath ]) ].filter(path => !exclude.includes(path))
   }

@@ -1,33 +1,5 @@
 import { PluginPath } from "#model"
 
-const _ = (a, b) => {
-  return {
-    field: a,
-    label: `${b}仓库路径`,
-    bottomHelpMessage: "格式：所有者/存储库:分支, 如: github.com/DenFengLai/DF-Plugin 则填 DenFengLai/DF-Plugin",
-    component: "GTags",
-    componentProps: {
-      allowAdd: true,
-      allowDel: true,
-      showPrompt: true,
-      promptProps: {
-        content: "请输入 所有者/存储库:分支",
-        placeholder: "请输入仓库路径",
-        okText: "添加",
-        rules: [
-          {
-            required: true, message: "不可以为空哦"
-          },
-          {
-            pattern: "^([\\w-]+)\\/([\\w.-]+)(?::([\\w.-]+))?$",
-            message: "格式不正确，请使用 所有者/存储库:分支 的格式"
-          }
-        ]
-      }
-    }
-  }
-}
-
 export default [
   {
     component: "SOFT_GROUP_BEGIN",
@@ -55,33 +27,58 @@ export default [
     }
   },
   {
-    field: "CodeUpdate.GithubToken",
-    label: "Github Api Token",
-    helpMessage: "用于请求Github Api",
-    bottomHelpMessage: "填写后可解除请求速率限制和监听私库，获取地址：https://github.com/settings/tokens",
-    component: "InputPassword",
+    field: "CodeUpdate.repos",
+    label: "GitApi配置",
+    bottomHelpMessage: "Git仓库的接口配置",
+    component: "GSubForm",
     componentProps: {
-      placeholder: "请输入Github Token"
-    }
-  },
-  {
-    field: "CodeUpdate.GiteeToken",
-    label: "Gitee Api Token",
-    helpMessage: "用于请求 Gitee Api",
-    bottomHelpMessage: "填写后可解除请求速率限制和监听私库，获取地址：https://gitee.com/profile/personal_access_tokens",
-    component: "InputPassword",
-    componentProps: {
-      placeholder: "请输入Gitee Token"
-    }
-  },
-  {
-    field: "CodeUpdate.GitcodeToken",
-    label: "Gitcode Api Token",
-    helpMessage: "用于请求Gitcode Api",
-    bottomHelpMessage: "获取地址：https://gitcode.com/setting/token-classic",
-    component: "InputPassword",
-    componentProps: {
-      placeholder: "请输入Token"
+      multiple: true,
+      schemas: [
+        {
+          field: "provider",
+          label: "仓库提供商",
+          component: "Input",
+          componentProps: {
+            placeholder: "请输入仓库提供商"
+          },
+          rules: [
+            {
+              required: true, message: "不可以为空哦"
+            }
+          ]
+        },
+        {
+          field: "token",
+          label: "认证Token",
+          component: "InputPassword",
+          componentProps: {
+            placeholder: "请输入认证Token"
+          },
+          bottomHelpMessage: "Gitee 令牌获取地址：https://gitee.com/profile/personal_access_tokens \nGithub 令牌获取地址：https://github.com/settings/tokens \nGitcode 令牌获取地址：https://gitcode.com/setting/token-classic 其他的请自行查找"
+        },
+        {
+          field: "ApiUrl",
+          label: "Api地址",
+          component: "Input",
+          componentProps: {
+            placeholder: "请输入Api地址"
+          },
+          rules: [
+            {
+              required: true, message: "不可以为空哦"
+            }
+          ]
+        },
+        {
+          field: "icon",
+          label: "图标",
+          component: "Input",
+          bottomHelpMessage: "仓库提供商的图标地址，支持file://、http://、https://等协议，Gitee、GiHhub、GitCode、Gitea内置图标",
+          componentProps: {
+            placeholder: "请输入图标地址, 不填为默认图标"
+          }
+        }
+      ]
     }
   },
   {
@@ -127,11 +124,67 @@ export default [
             }
           }
         },
-        _("GithubList", "Github"),
-        _("GithubReleases", "Github发行版"),
-        _("GiteeList", "Gitee"),
-        _("GiteeReleases", "Gitee发行版"),
-        _("GitcodeList", "Gitcode"),
+        {
+          field: "repos",
+          label: "监听仓库配置",
+          bottomHelpMessage: "Git仓库推送列表",
+          component: "GSubForm",
+          componentProps: {
+            multiple: true,
+            schemas: [
+              {
+                field: "provider",
+                label: "仓库提供商",
+                component: "Input",
+                componentProps: {
+                  placeholder: "请输入仓库提供商"
+                },
+                rules: [
+                  {
+                    required: true, message: "不可以为空哦"
+                  }
+                ]
+              },
+              {
+                field: "repo",
+                label: "仓库名",
+                component: "Input",
+                componentProps: {
+                  placeholder: "请输入仓库名"
+                },
+                rules: [
+                  {
+                    pattern: "^([\\w-]+)\\/([\\w.-]+)$",
+                    message: "格式不正确，请使用 所有者/存储库 的格式"
+                  },
+                  {
+                    required: true, message: "不可以为空哦"
+                  }
+                ]
+              },
+              {
+                field: "branch",
+                label: "分支名",
+                component: "Input",
+                componentProps: {
+                  placeholder: "请输入分支名"
+                }
+              },
+              {
+                field: "type",
+                label: "监听类型",
+                component: "RadioGroup",
+                required: true,
+                componentProps: {
+                  options: [
+                    { label: "提交", value: "commit" },
+                    { label: "发布", value: "releases" }
+                  ]
+                }
+              }
+            ]
+          }
+        },
         {
           field: "note",
           label: "备注",

@@ -15,20 +15,27 @@ CodeUpdate:
     Github/Gitee Api 未认证用户每小时限制60（ip限制),认证用户每小时限制5000次（账号限制）
   Cron: "0 */30 * * * *"
 
-  GiteeTokenTips: |-
-    Gitee个人Token
-    获取地址： https://gitee.com/profile/personal_access_tokens
-  GiteeToken: ""
-
-  GithubTokenTips: |-
-    Github个人Token
-    获取地址： https://github.com/settings/tokens
-  GithubToken: ""
-
-  GitcodeTokenTips: |-
-    Gitcode个人Token
-    获取地址： https://gitcode.com/setting/token-classic
-  GitcodeToken: ""
+  RepoTips: |-
+    GitApi配置
+      provider: 仓库提供商，唯一标识符
+      token: 认证Token
+      ApiUrl: Api地址
+  repos:
+  - provider: "GitHub"
+    token: ""
+    ApiUrl: "https://api.github.com/repos"
+    icon: "GitHub"
+    tips: Github个人Token 获取地址 https://github.com/settings/tokens
+  - provider: "Gitee"
+    token: ""
+    ApiUrl: "https://gitee.com/api/v5/repos"
+    icon: "Gitee"
+    tips: Gitee个人Token 获取地址 https://gitee.com/profile/personal_access_tokens
+  - provider: "Gitcode"
+    token: ""
+    ApiUrl: "https://gitcode.com/api/v5/repos"
+    icon: "Gitcode"
+    tips: Gitcode个人Token 获取地址 https://gitcode.com/setting/token-classic
 
   ListTips: |-
     推送配置
@@ -36,10 +43,12 @@ CodeUpdate:
     QQ: 推送的QQ列表
     AutoPath: 是否自动获取已安装的插件地址并监听
     Exclude: 排除的仓库路径(用于忽略一些不希望被监听的插件)
-    GithubList: 自定义关注的Github仓库路径 (格式: 所有者/存储库:分支)
-    GiteeList: 自定义关注的Gitee仓库路径  (格式: 所有者/存储库:分支)
-    GithubReleases: Github发行版监听仓库列表 (格式: 所有者/存储库)
-    GiteeReleases: Gitee发行版监听仓库列表 (格式: 所有者/存储库)
+    repos: 
+        provider: 仓库提供商，唯一标识符
+        repo: 仓库名
+        branch: 分支名 (commit时有效 为空自动获取)
+        type: commit 或 release
+        icon: 图标
     note: 备注
   List: []
 

@@ -1,4 +1,4 @@
-import { request } from "#components"
+import { request, Config } from "#components"
 import { logger } from "#lib"
 
 const GitUrl = {
@@ -18,7 +18,11 @@ export default new class {
    * @returns {Promise<object[]>} 提交数据或false（请求失败）
    */
   async getRepositoryData(repo, source, type = "commits", token, sha) {
-    let isGitHub = false, baseURL = GitUrl[source]
+    let a = Config.CodeUpdate.repos.reduce((acc, item) => {
+      acc[item.provider] = item.ApiUrl
+      return acc
+    }, {})
+    let isGitHub = false, baseURL = a[source] || GitUrl[source]
 
     if (!baseURL) {
       logger.error(`未知数据源: ${source}`)
