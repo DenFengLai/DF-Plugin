@@ -1,4 +1,5 @@
 import { PluginPath } from "#model"
+import { Config } from "#components"
 
 export default [
   {
@@ -135,9 +136,13 @@ export default [
               {
                 field: "provider",
                 label: "仓库提供商",
-                component: "Input",
+                component: "Select",
                 componentProps: {
-                  placeholder: "请输入仓库提供商"
+                  placeholder: "请选择仓库提供商",
+                  mode: "combobox",
+                  get options() {
+                    return Config.CodeUpdate?.repos?.map?.(i => ({ value: i?.provider }))
+                  }
                 },
                 rules: [
                   {
