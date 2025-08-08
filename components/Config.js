@@ -28,7 +28,9 @@ class Config {
     for (const i in this.config) {
       keep[i] = {}
       for (const j in this.config[i]) {
-        if (j.endsWith("Tips")) { keep[i][j] = this.config[i][j] }
+        if (j.endsWith("Tips")) {
+          keep[i][j] = this.config[i][j]
+        }
       }
     }
 
@@ -37,6 +39,44 @@ class Config {
     })
     this.config = config
     this.configSave = configSave
+
+    /** 迁移 v1 配置 */
+    let changed = false
+    for (const i in this.config) {
+      if (i === "CodeUpdate") {
+        if (Array.isArray(this.config[i].List)) {
+          this.config[i].List.forEach(item => {
+            if (typeof item !== "object") return
+            const repos = []
+            const sources = [
+              { key: "GithubList", provider: "GitHub", type: "commit" },
+              { key: "GithubReleases", provider: "GitHub", type: "releases" },
+              { key: "GiteeList", provider: "Gitee", type: "commit" },
+              { key: "GiteeReleases", provider: "Gitee", type: "releases" },
+              { key: "GitcodeList", provider: "Gitcode", type: "commit" },
+              { key: "Gitcode", provider: "Gitcode", type: "releases" }
+            ]
+            for (const { key, provider, type } of sources) {
+              const list = item[key]
+              if (!Array.isArray(list)) continue
+              list.forEach(str => {
+                if (typeof str !== "string") return
+                const [ repo, branch ] = str.split(":")
+                const entry = { provider, repo, type }
+                if (branch) entry.branch = branch
+                repos.push(entry)
+              })
+              delete item[key]
+              changed = true
+            }
+            if (!Array.isArray(item.repos)) item.repos = []
+            item.repos.push(...repos)
+          })
+        }
+      }
+    }
+    if (changed) this.configSave()
+
     return this
   }
 

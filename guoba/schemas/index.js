@@ -1,4 +1,4 @@
-import CodeUpdata from "./CodeUpdata.js"
+import CodeUpdate from "./CodeUpdate.js"
 import Picture from "./Picture.js"
 import Poke from "./Poke.js"
 import other from "./other.js"
@@ -10,7 +10,7 @@ import { Config } from "#components"
 export const schemas = [
   sendMaster,
   Poke,
-  CodeUpdata,
+  CodeUpdate,
   Picture,
   summary,
   proxy,
