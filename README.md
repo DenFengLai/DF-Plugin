@@ -14,6 +14,8 @@
 [![Miao-Yunzai V3](https://img.shields.io/github/package-json/v/yoimiya-kokomi/Miao-Yunzai?label=Miao-Yunzai&color=yellow)](https://github.com/yoimiya-kokomi/Miao-Yunzai)
 [![TRSS-Yunzai](https://img.shields.io/github/package-json/v/TimeRainStarSky/Yunzai?label=TRSS-Yunzai&color=blue)](https://github.com/TimeRainStarSky/Yunzai)
 
+> [Karin版](https://github.com/DenFengLai/karin-plugin-df)
+> Karin版现已发布🎉 欢迎Karin用户前来尝鲜
 
 ## 💡 安装教程
 
@@ -45,7 +47,7 @@ pnpm install -P
 
 <details><summary>随机图片</summary>
 
-- #来张JK / 黑丝 / cos / 腿子 / 丛雨 /诗歌剧
+- #来张JK / 黑丝 / cos / 腿 ...
 - #DF随机表情列表
 
 > 随机发送一张图片
@@ -145,9 +147,9 @@ pnpm install -P
 
 ## 💬 免责声明
 
-1. 本项目仅供学习使用，请勿用于商业等场景。  
+1. 本项目仅供学习和交流使用，禁止用于任何商业用途及违法用途。
 
-2. 项目内图片、API等资源均来源于网络，如侵犯了您的利益请及时联系项目开发者进行删除。
+2. 项目中的图片、API等资源均来自互联网，如有侵权请及时联系开发者，我们会尽快处理删除相关内容。
 
 ## 🍀 意见反馈
 
@@ -163,7 +165,7 @@ pnpm install -P
 
 ## ⭐ 支持本项目
 
-如果你觉得本项目对你有帮助，请给本项目点点star，你是鼓励是我们前进的动力。
+如果你觉得本项目对你有帮助，请给本项目点一个star，你的鼓励是我们不断前进的动力。
 
 ## ❤️ 赞助作者
 
@@ -178,5 +180,5 @@ pnpm install -P
 
 ## 🎁 特别鸣谢
 
-- [XY-Api](https://ciallo.ciallo.pro/)：提供戳一戳图片接口服务支持
+- [XY-Api](https://ciallo.ciallo.pro)：提供戳一戳图片接口服务支持
 - [素颜Api](https://api.suyanw.cn)：提供部分Api服务
