@@ -14,6 +14,11 @@
 [![Miao-Yunzai V3](https://img.shields.io/github/package-json/v/yoimiya-kokomi/Miao-Yunzai?label=Miao-Yunzai&color=yellow)](https://github.com/yoimiya-kokomi/Miao-Yunzai)
 [![TRSS-Yunzai](https://img.shields.io/github/package-json/v/TimeRainStarSky/Yunzai?label=TRSS-Yunzai&color=blue)](https://github.com/TimeRainStarSky/Yunzai)
 
+## ⚠️ **重要通知**
+
+当前分支已 **弃用**，建议切换到 [v2 分支](https://github.com/DenFengLai/DF-Plugin/tree/v2) 以获得最新功能和支持。
+
+---
 
 ## 💡 安装教程
 
