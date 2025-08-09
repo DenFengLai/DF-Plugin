@@ -7,6 +7,6 @@ export async function generateScreenshot(content, saveId) {
     saveId,
     lifeData: content,
     pluResPath: Res_Path,
-    copyright: `Created By ${Version.name} <span class="version">v${Version.yunzai}</span> & ${Plugin_Name}<span class="version">v${Version.ver}</span>`
+    copyright: `Created By ${Version.name}<span class="version">v${Version.yunzai}</span> & ${Plugin_Name}<span class="version">v${Version.ver}</span>`
   })
 }
