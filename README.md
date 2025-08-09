@@ -14,8 +14,7 @@
 [![Miao-Yunzai V3](https://img.shields.io/github/package-json/v/yoimiya-kokomi/Miao-Yunzai?label=Miao-Yunzai&color=yellow)](https://github.com/yoimiya-kokomi/Miao-Yunzai)
 [![TRSS-Yunzai](https://img.shields.io/github/package-json/v/TimeRainStarSky/Yunzai?label=TRSS-Yunzai&color=blue)](https://github.com/TimeRainStarSky/Yunzai)
 
-> [Karin版](https://github.com/DenFengLai/karin-plugin-df)
-> Karin版现已发布🎉 欢迎Karin用户前来尝鲜
+> [Karin版](https://github.com/DenFengLai/karin-plugin-df)现已发布🎉, 欢迎Karin用户前来尝鲜
 
 ## 💡 安装教程
 

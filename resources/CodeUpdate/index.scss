@@ -201,11 +201,17 @@ body {
     }
 }
 
-.logo {
+.copyright {
     font-size: 14px;
     text-align: center;
     color: #c3c4c4;
     margin-top: 10px;
+
+    .version {
+        color: #d3bc8e;
+        display: inline-block;
+        padding: 0 3px;
+    }
 }
 
 .file-count {

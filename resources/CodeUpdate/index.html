@@ -29,12 +29,12 @@
             </div>
             {{if item.name.branch}}
             <div class="branch">
-              <img src="{{pluResPath}}CodeUpdate/icon/branch.svg"> {{item.name.branch}}
+              <img src="{{pluResPath}}/CodeUpdate/icon/branch.svg"> {{item.name.branch}}
             </div>
             {{/if}}
             {{if item.name.tag}}
             <div class="branch">
-              <img src="{{pluResPath}}CodeUpdate/icon/tag.svg"> {{item.name.tag}}
+              <img src="{{pluResPath}}/CodeUpdate/icon/tag.svg"> {{item.name.tag}}
             </div>
             {{/if}}
             <div class="dec">
@@ -59,7 +59,7 @@
         {{/each}}
       </div>
     </div>
-    <div class="logo">Created By DF-Plugin</div>
+    <div class="copyright">{{@copyright}}</div>
   </div>
 </body>
 
