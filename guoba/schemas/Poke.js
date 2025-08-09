@@ -17,10 +17,12 @@ export default [
     component: "RadioGroup",
     required: true,
     componentProps: {
-      options: [
-        { label: "随机类型", value: "all" },
-        ...Poke_List.map((name, id) => ({ label: name, value: id }))
-      ]
+      get options() {
+        return [
+          { label: "随机类型", value: "all" },
+          ...Poke_List.map((name, id) => ({ label: name, value: id }))
+        ]
+      }
     }
   },
   {
@@ -31,7 +33,9 @@ export default [
     componentProps: {
       allowClear: true,
       mode: "tags",
-      options: Poke_List.map((name) => ({ value: name }))
+      get options() {
+        return Poke_List.map((name) => ({ value: name }))
+      }
     }
   }
 ]
