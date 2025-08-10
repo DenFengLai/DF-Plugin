@@ -18,7 +18,7 @@ export const schemas = [
 ].flat()
 
 export function getConfigData() {
-  const configKeys = [ "other", "sendMaster", "CodeUpdate", "summary", "Picture", "proxy" ]
+  const configKeys = [ "other", "sendMaster", "CodeUpdate", "summary", "Picture", "proxy", "Poke" ]
   return configKeys.reduce((acc, key) => {
     acc[key] = Config[key]
     return acc

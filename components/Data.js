@@ -4,6 +4,11 @@ import path from "node:path"
 import { Path, Plugin_Name, Plugin_Path } from "../constants/Path.js"
 import { logger } from "#lib"
 
+/**
+ * 获取根目录
+ * @param {"root" | "yunzai" | string} root
+ * @returns {string} 返回的路径
+ */
 const getRoot = (root = "") => {
   if (root === "root" || root === "yunzai") {
     root = `${Path}/`
@@ -14,31 +19,61 @@ const getRoot = (root = "") => {
 }
 
 let Data = {
-
-  /*
-  * 根据指定的path依次检查与创建目录
-  * */
+  /**
+   * 根据指定的path依次检查与创建目录
+   * @param {string} path
+   * @param {"root" | "yunzai" | string} root
+   * @param includeFile
+   */
   createDir(path = "", root = "", includeFile = false) {
     root = getRoot(root)
-    let pathList = path.split("/")
+    const pathList = path.split("/").map(name => name.trim())
     let nowPath = root
-    pathList.forEach((name, idx) => {
-      name = name.trim()
-      if (!includeFile && idx <= pathList.length - 1) {
-        nowPath += name + "/"
-        if (name) {
-          if (!fs.existsSync(nowPath)) {
-            fs.mkdirSync(nowPath)
-          }
-        }
+
+    for (let i = 0; i < pathList.length; i++) {
+      const name = pathList[i]
+      if (!name) continue
+
+      const isLast = i === pathList.length - 1
+      if (!includeFile && isLast) break
+
+      nowPath = path.join(nowPath, name)
+
+      if (!fs.existsSync(nowPath)) {
+        fs.mkdirSync(nowPath)
       }
-    })
+    }
   },
 
+  /** JSON缓存 */
+  JSONCache: {},
+  /**
+   * 获取JSON文件并缓存
+   * @param {string} file 文件相对路径
+   * @param {"root" | "yunzai" | string} root
+   * @returns {object}
+   */
+  getJSON(file = "", root = "") {
+    root = getRoot(root)
+    const filePath = path.resolve(root, file)
+    if (this.JSONCache[filePath]) return this.JSONCache[filePath]
+    if (fs.existsSync(filePath)) {
+      try {
+        let data = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        this.JSONCache[filePath] = data
+        return data
+      } catch (e) {
+        logger.error("读取JSON文件错误", e)
+        return {}
+      }
+    }
+    return {}
+  },
   /**
    * 读取json
-   * @param file
-   * @param root
+   * @param {string} file
+   * @param {"root" | "yunzai" | string} root
+   * @returns {object}
    */
   readJSON(file = "", root = "") {
     root = getRoot(root)
@@ -47,6 +82,7 @@ let Data = {
         return JSON.parse(fs.readFileSync(`${root}/${file}`, "utf8"))
       } catch (e) {
         console.log(e)
+        return {}
       }
     }
     return {}
@@ -58,14 +94,17 @@ let Data = {
    * @param data
    * @param root
    * @param space
+   * @returns {boolean}
    */
-  writeJSON(file, data, root = "", space = "\t") {
+  writeJSON(file, data, root = "", space = 2) {
     // 检查并创建目录
     Data.createDir(file, root, true)
     root = getRoot(root)
     // delete data._res
     try {
-      fs.writeFileSync(`${root}/${file}`, JSON.stringify(data, null, space))
+      const filePath = path.resolve(root, file)
+      fs.writeFileSync(filePath, JSON.stringify(data, null, space))
+      this.JSONCache[filePath] = data
       return true
     } catch (err) {
       logger.error(err)
@@ -73,7 +112,7 @@ let Data = {
     }
   },
 
-  async getCacheJSON(key) {
+  async getRedisJSON(key) {
     try {
       let txt = await redis.get(key)
       if (txt) {
@@ -85,7 +124,7 @@ let Data = {
     return {}
   },
 
-  async setCacheJSON(key, data, EX = 3600 * 24 * 90) {
+  async setRedisJSON(key, data, EX = 3600 * 24 * 90) {
     await redis.set(key, JSON.stringify(data), { EX })
   },
 

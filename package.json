@@ -1,6 +1,6 @@
 {
   "name": "df-plugin",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Yunzai-Bot扩展插件",
   "main": "index.js",
   "type": "module",

@@ -12,7 +12,7 @@ CodeUpdate:
 
   CronTips: |-
     仓库更新检查Cron表达式
-    Github/Gitee Api 未认证用户每小时限制60（ip限制),认证用户每小时限制5000次（账号限制）
+    Github/Gitee Api 未认证用户每小时限制60 (ip限制), 认证用户每小时限制5000次 (账号限制)
   Cron: "0 */30 * * * *"
 
   RepoTips: |-
@@ -52,42 +52,64 @@ CodeUpdate:
     note: 备注
   List: []
 
-other:
+Poke: 
   chuoTips: |-
     戳一戳开关
   chuo: true
 
-  chuoTypeTips: |-
+  modeTips: |-
+    戳一戳模式
+    image: 返回图片消息
+    text: 返回文本消息
+    random: 随机返回文本或图片
+    mix: 同时显示图片+文字
+  mode: image
+
+  imageTypeTips: |-
     戳一戳图片设置
-    1：柴郡表情包 
-    2：丛雨表情包 
-    3：诗歌剧表情包 
-    4：柚子厨表情包 
-    5：小南梁表情包
-    6：小鲨鱼古拉
-    7：甘城猫猫
+    1: 柴郡
+    2: 丛雨
+    3: 诗歌剧 
+    4: 柚子厨 
+    5: 小南梁
+    6: 小鲨鱼古拉
+    7: 甘城猫猫
     8: 龙图
-    9：满穗表情包
-    10: 猫猫虫表情
-    11：纳西妲表情
-    12；心海表情
-    13：fufu表情
-    14: ATRI表情包
-    15: 绫地宁宁表情包
-    16: 永雏塔菲表情包
-    17：miku表情包
-    18：特蕾西娅表情包
-    19：doro表情包
-    20：米塔表情包
-    0：自定义图片（自行在resources/poke/default中添加）
+    9: 满穗
+    10: 猫猫虫
+    11: 纳西妲
+    12: 心海
+    13: fufu
+    14: ATRI
+    15: 绫地宁宁
+    16: 永雏塔菲
+    17: miku
+    18: 特蕾西娅
+    19: doro
+    20: 米塔
+    0: 自定义图片 (自行在resources/poke/default中添加)
     all: 随机类型
-  chuoType: 1
+  imageType: 1
 
-  BlackTips: |-
-    戳一戳随机类型黑名单
-  Black:
-
+  imageBlackTips: |-
+    戳一戳随机图片黑名单
+  imageBlack:
     - default
+
+  textModeTips: |-
+    戳一戳文字设置
+    hitokoto: 一言
+    list: 自定义文本
+  textMode: hitokoto
+
+  textListTips: |-
+    戳一戳文字列表
+    此列表的文字将被随机
+  textList:
+    - 你干嘛哎呦
+
+
+other:
   ysTips: |-
     原神关键词发图
   ys: true
@@ -107,11 +129,11 @@ sendMaster:
   open: true
 
   cdTips: |-
-    联系主人CD 单位：秒 填0关闭cd
+    联系主人CD 单位: 秒 填0关闭cd
   cd: 30
 
   MasterTips: |-
-    是否发送全部主人 0：仅发送首个主人 1：发送全部主人 
+    是否发送全部主人 0: 仅发送首个主人 1: 发送全部主人 
     填主人账号可以指定发送某个主人
   Master: 0
 
@@ -154,7 +176,7 @@ summary:
   sum: false
 
   typeTips: |-
-    外显模式 (1: 自定义外显 2： 一言接口 3：列表随机)
+    外显模式 (1: 自定义外显 2:  一言接口 3: 列表随机)
   type: 2
 
   textTips: |-

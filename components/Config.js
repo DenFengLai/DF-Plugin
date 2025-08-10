@@ -99,6 +99,11 @@ class Config {
     return this.config.sendMaster
   }
 
+  /** 戳一戳配置 */
+  get Poke() {
+    return this.config.Poke
+  }
+
   /** 其他配置 */
   get other() {
     return this.config.other
