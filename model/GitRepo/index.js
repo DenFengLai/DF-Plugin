@@ -120,9 +120,9 @@ function execCmd(cwd, cmd) {
  */
 function classify(url, branch, result) {
   const hosts = [
-    { key: "github", pattern: /(?:https?:\/\/|git@)github\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i },
-    { key: "gitee", pattern: /(?:https?:\/\/|git@)gitee\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i },
-    { key: "gitcode", pattern: /(?:https?:\/\/|git@)gitcode\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i }
+    { key: "github", pattern: /github\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i },
+    { key: "gitee", pattern: /gitee\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i },
+    { key: "gitcode", pattern: /gitcode\.com[:/](?<repo>[^/]+\/[^/.]+)(?:\.git)?/i }
   ]
 
   for (const { key, pattern } of hosts) {
