@@ -1,7 +1,7 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { exec } from "child_process"
-import { Path, Config } from "#components"
+import { Path, Config, common } from "#components"
 import { logger } from "#lib"
 
 /**
@@ -9,6 +9,9 @@ import { logger } from "#lib"
  * @type {{ GitHub: string[], Gitee: string[], Gitcode: string[] }}
  */
 export const PluginPath = { GitHub: [], Gitee: [], Gitcode: [] }
+
+/** 是否为载入中 */
+export let Loading = false
 
 // 初始化常量
 if (Config.AutoPath) loadLocalPlugins()
@@ -18,7 +21,10 @@ if (Config.AutoPath) loadLocalPlugins()
  * @returns {Promise<void>}
  */
 async function loadLocalPlugins() {
-  console.time("[DF-Plugin] 载入本地Git仓库列表")
+  Loading = true
+  const timer = common.createTimer()
+  logger.mark("正在载入本地Git仓库列表")
+  timer.start()
   try {
     const { github, gitee, gitcode } = await findRepos(Path)
     PluginPath.GitHub.push(...github)
@@ -27,7 +33,8 @@ async function loadLocalPlugins() {
   } catch (err) {
     logger.error("加载本地Git仓库时出错:", err)
   } finally {
-    console.timeEnd("[DF-Plugin] 载入本地Git仓库列表")
+    Loading = false
+    logger.mark(`本地Git仓库载入完成, 耗时: ${timer.end()}`)
   }
 }
 

@@ -1,5 +1,5 @@
-import { autoFillDefaultBranches } from "./services/autoBranchService.js"
+import { autoFillDefaultBranches } from "./services/autoBranch.js"
 
 autoFillDefaultBranches()
 
-export { default } from "./services/updateService.js"
+export { default } from "./services/update.js"

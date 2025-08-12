@@ -1,6 +1,6 @@
 import lodash from "lodash"
 import redisHeler from "../utils/redisHelper.js"
-import { formatCommitInfo, formatReleaseInfo } from "./formatService.js"
+import { formatCommitInfo, formatReleaseInfo } from "./format.js"
 import { GitApi } from "../../api/index.js"
 import { AutoPathBranch } from "../constants.js"
 import { logger } from "#lib"
