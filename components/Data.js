@@ -21,13 +21,13 @@ const getRoot = (root = "") => {
 let Data = {
   /**
    * 根据指定的path依次检查与创建目录
-   * @param {string} path
+   * @param {string} _path
    * @param {"root" | "yunzai" | string} root
    * @param includeFile
    */
-  createDir(path = "", root = "", includeFile = false) {
+  createDir(_path = "", root = "", includeFile = false) {
     root = getRoot(root)
-    const pathList = path.split("/").map(name => name.trim())
+    const pathList = _path.split("/").map(name => name.trim())
     let nowPath = root
 
     for (let i = 0; i < pathList.length; i++) {
