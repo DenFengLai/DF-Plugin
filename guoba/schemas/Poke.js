@@ -20,9 +20,8 @@ export default [
       options: [
         { label: "图片", value: "image" },
         { label: "文本", value: "text" },
-        { label: "随机", value: "random" }
-        // { label: "图片 + 文本", value: "mix" }
-        // 暂未实装嘻嘻
+        { label: "随机", value: "random" },
+        { label: "图片 + 文本", value: "mix" }
       ]
     },
     required: true
