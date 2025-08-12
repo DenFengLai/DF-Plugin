@@ -1,6 +1,6 @@
 import fs from "node:fs"
 import { imagePoke } from "#model"
-import { Config, Poke_List, Poke_Path, Data, Res_Path } from "#components"
+import { Config, Poke_List, Poke_Path, Data } from "#components"
 import { logger } from "#lib"
 import _ from "lodash"
 
@@ -62,7 +62,7 @@ export class DF_Poke extends plugin {
   Text() {
     const { textMode, textList } = Config.Poke
     if (textMode === "hitokoto") {
-      const data = Data.getJSON("poke_hitokoto.json", Res_Path)
+      const data = Data.getJSON("PokeText.json", "json")
       if (data && Array.isArray(data) && data.length > 0) {
         const text = _.sample(data)
         logger.debug(`${logger.blue("[ DF-Plugin ]")}${logger.green("[戳一戳]")} 获取一言文字:`, text)

@@ -24,13 +24,13 @@
 git clone --depth=1 https://github.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
 ```
 
-- Gitee
+- Gitee镜像
 
 ```sh
 git clone --depth=1 https://gitee.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
 ```
 
-- Gitcode
+- Gitcode镜像 (可能更新不及时)
 
 ```sh
 git clone --depth=1 https://gitcode.com/DenFengLai/DF-Plugin.git ./plugins/DF-Plugin
@@ -63,9 +63,10 @@ pnpm install -P
 
 <details><summary>随机表情戳一戳</summary>
 
-> 戳一戳返回随机表情包  
+> 戳一戳返回随机表情包和文本
 > 使用 #DF安装图库 可安装图库到本地使用  
 > 未安装图库将调用[XY-Api](https://ciallo.ciallo.pro/)
+> 支持的表情包类型 → [戳我查看](./resources/json/FaceList.json)
 
 </details>
 

@@ -150,17 +150,17 @@ try {
   }
 } catch (err) {}
 
-try {
-  if (PluginPackageData.version !== currentVersion) {
-    console.log(`[DF-Plugin] 版本号不一致，更新版本号为: ${currentVersion}`)
-    PluginPackageData.version = currentVersion
+// try {
+//   if (PluginPackageData.version !== currentVersion) {
+//     console.log(`[DF-Plugin] 版本号不一致，更新版本号为: ${currentVersion}`)
+//     PluginPackageData.version = currentVersion
 
-    fs.writeFileSync(PluginPackagePath, JSON.stringify(PluginPackageData, null, 2), "utf8")
-    console.log("[DF-Plugin] package.json 已更新")
-  }
-} catch (error) {
-  console.error("读取或解析 package.json 出现错误:", error)
-}
+//     fs.writeFileSync(PluginPackagePath, JSON.stringify(PluginPackageData, null, 2), "utf8")
+//     console.log("[DF-Plugin] package.json 已更新")
+//   }
+// } catch (error) {
+//   console.error("读取或解析 package.json 出现错误:", error)
+// }
 
 let { author } = PluginPackageData
 const yunzaiVersion = packageJson.version

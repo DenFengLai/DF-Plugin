@@ -1,17 +1,21 @@
 import _ from "lodash"
 import fs from "node:fs"
 import path from "node:path"
-import { Path, Plugin_Name, Plugin_Path } from "../constants/Path.js"
+import { Path, Plugin_Name, Plugin_Path, Res_Path } from "../constants/Path.js"
 import { logger } from "#lib"
 
 /**
  * 获取根目录
- * @param {"root" | "yunzai" | string} root
+ * @param {"root" | "yunzai" | "res" | string} root 根
  * @returns {string} 返回的路径
  */
 const getRoot = (root = "") => {
   if (root === "root" || root === "yunzai") {
     root = `${Path}/`
+  } else if (root === "res") {
+    root = Res_Path
+  } else if (root === "json") {
+    root = path.join(Res_Path, "json")
   } else if (!root) {
     root = `${Plugin_Path}/`
   }

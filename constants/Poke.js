@@ -1,34 +1,8 @@
 import { Poke_Path } from "./Path.js"
 import fs from "node:fs"
+import Data from "../components/Data.js"
 
-let Poke_List = [
-  "default",
-  "柴郡猫",
-  "丛雨",
-  "诗歌剧",
-  "柚子厨",
-  "小南梁",
-  "古拉",
-  "甘城猫猫",
-  "龙图",
-  "满穗",
-  "猫猫虫",
-  "纳西妲",
-  "心海",
-  "fufu",
-  "ATRI",
-  "绫地宁宁",
-  "永雏塔菲",
-  "miku",
-  "特蕾西娅",
-  "doro",
-  "米塔",
-  "冬川花璃",
-  "neuro",
-  "kipfel",
-  "mygo",
-  "猫猫收藏家"
-]
+let Poke_List = Array.from(Data.getJSON("FaceList.json", "json"))
 
 /**
  * 兼容用户自建目录
