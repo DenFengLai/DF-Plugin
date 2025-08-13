@@ -30,7 +30,7 @@ function randomFile(dirPath) {
  * @returns {string|null} 文件路径或api地址
  */
 function imagePoke(name = "all") {
-  let { Black } = Config.other, List = Poke_List
+  let { Black } = Config.Poke, List = Poke_List
   if (name == "all") {
     if (Array.isArray(Black) && Black.length > 0) {
       List = Poke_List.filter(type => !Black.includes(type))
