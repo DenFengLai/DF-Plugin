@@ -8,7 +8,7 @@ import { logger } from "#lib"
 const key = "DF:contact"
 let Sending = false
 segment.reply ??= (id) => ({ type: "reply", id })
-const ReplyReg = /^#?回复(\S+)\s?(.*)?$/
+const ReplyReg = /^#?回复(\S+)?\s?(.*)?$/
 
 export class SendMasterMsgs extends plugin {
   constructor() {
@@ -110,7 +110,7 @@ export class SendMasterMsgs extends plugin {
         MsgID = extractMessageId(source.raw_message)
       } else {
         const regRet = ReplyReg.exec(e.msg)
-        if (!regRet[1]) return logger.warn(" 未找到消息ID")
+        if (!regRet[1]) return logger.warn("未找到消息ID")
         else {
           MsgID = regRet[1].trim()
           isInput = true
