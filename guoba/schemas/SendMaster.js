@@ -43,15 +43,75 @@ export default [
     }
   },
   {
-    field: "sendMaster.sendAvatar",
-    label: "消息附带触发者头像",
-    bottomHelpMessage: "微信Bot如果遇到报错请关闭此项。",
-    component: "Switch"
+    field: "sendMaster.MsgTemplate",
+    label: "通知消息模板",
+    helpMessage: "发送给主人的消息模板",
+    bottomHelpMessage: `支持的变量:
+    key: 消息标识，用于回复消息时调用，如果不需要回复可以删掉
+    avatar: 发送者头像
+    platform: 平台信息
+    user: 触发者信息
+    gloup: 群聊信息 私聊时显示私聊
+    bot: 触发Bot信息
+    time: 发送时间
+    msg: 消息内容`,
+    component: "InputTextArea",
+    required: true,
+    componentProps: {
+      // readonly: true,
+      // autosize: true,
+      autosize: {
+        minRows: 5,
+        maxRows: 11
+      }
+    }
   },
   {
-    field: "sendMaster.replyQQ",
-    label: "是否回复主人账号",
-    component: "Switch"
+    field: "sendMaster.successMsgTemplate",
+    label: "成功发送回复文本",
+    helpMessage: "发送成功后回复给用户的消息",
+    bottomHelpMessage: `支持的变量:
+    masterQQ 主人的QQ`,
+    component: "InputTextArea",
+    required: true,
+    componentProps: {
+      autosize: {
+        minRows: 1,
+        maxRows: 10
+      }
+    }
+  },
+  {
+    field: "sendMaster.failsMsgTemplate",
+    label: "发送失败回复文本",
+    helpMessage: "发送失败后回复给用户的消息",
+    bottomHelpMessage: `支持的变量:
+    masterQQ 主人的QQ`,
+    component: "InputTextArea",
+    required: true,
+    componentProps: {
+      autosize: {
+        minRows: 1,
+        maxRows: 10
+      }
+    }
+  },
+  {
+    field: "sendMaster.replyMsgTemplate",
+    label: "回复消息文本",
+    helpMessage: "主人回复时发送的消息",
+    bottomHelpMessage: `支持的变量:
+    nickname 主人昵称
+    id 进行回复操作的主人账号
+    msg 消息内容`,
+    component: "InputTextArea",
+    required: true,
+    componentProps: {
+      autosize: {
+        minRows: 1,
+        maxRows: 10
+      }
+    }
   },
   {
     field: "sendMaster.banWords",

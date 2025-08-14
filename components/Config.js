@@ -15,7 +15,7 @@ class Config {
     /** 导入旧配置文件 */
     const path = `${this.plugin_path}/config/config`
     if (await fs.stat(path).catch(() => false)) {
-      for (let file of (await fs.readdir(path)).filter(file => file.endsWith(".yaml"))) {
+      for (const file of (await fs.readdir(path)).filter(file => file.endsWith(".yaml"))) {
         const key = file.replace(".yaml", "")
         if (!(key in this.config)) continue
         _.merge(this.config[key], YAML.parse(await fs.readFile(`${path}/${file}`, "utf8")))

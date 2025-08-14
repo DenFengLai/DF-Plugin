@@ -22,7 +22,7 @@ const getRoot = (root = "") => {
   return root
 }
 
-let Data = {
+const Data = {
   /**
    * 根据指定的path依次检查与创建目录
    * @param {string} _path
@@ -63,7 +63,7 @@ let Data = {
     if (this.JSONCache[filePath]) return this.JSONCache[filePath]
     if (fs.existsSync(filePath)) {
       try {
-        let data = JSON.parse(fs.readFileSync(filePath, "utf8"))
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"))
         this.JSONCache[filePath] = data
         return data
       } catch (e) {
@@ -118,7 +118,7 @@ let Data = {
 
   async getRedisJSON(key) {
     try {
-      let txt = await redis.get(key)
+      const txt = await redis.get(key)
       if (txt) {
         return JSON.parse(txt)
       }
@@ -139,7 +139,7 @@ let Data = {
     }
     if (fs.existsSync(`${root}/${file}`)) {
       try {
-        let data = await import(`file://${root}/${file}?t=${new Date() * 1}`)
+        const data = await import(`file://${root}/${file}?t=${new Date() * 1}`)
         return data || {}
       } catch (e) {
         console.log(e)
@@ -149,7 +149,7 @@ let Data = {
   },
 
   async importDefault(file, root) {
-    let ret = await Data.importModule(file, root)
+    const ret = await Data.importModule(file, root)
     return ret.default || {}
   },
 
@@ -158,7 +158,7 @@ let Data = {
   },
 
   async importCfg(key) {
-    let sysCfg = await Data.importModule(`config/system/${key}_system.js`)
+    const sysCfg = await Data.importModule(`config/system/${key}_system.js`)
     let diyCfg = await Data.importModule(`config/${key}.js`)
     if (diyCfg.isSys) {
       console.error(`${Plugin_Name}: config/${key}.js无效，已忽略`)
@@ -184,8 +184,8 @@ let Data = {
 
   getData(target, keyList = "", cfg = {}) {
     target = target || {}
-    let defaultData = cfg.defaultData || {}
-    let ret = {}
+    const defaultData = cfg.defaultData || {}
+    const ret = {}
     // 分割逗号
     if (typeof (keyList) === "string") {
       keyList = keyList.split(",")
@@ -193,9 +193,9 @@ let Data = {
 
     _.forEach(keyList, (keyCfg) => {
       // 处理通过:指定 toKey & fromKey
-      let _keyCfg = keyCfg.split(":")
-      let keyTo = _keyCfg[0].trim()
-      let keyFrom = (_keyCfg[1] || _keyCfg[0]).trim()
+      const _keyCfg = keyCfg.split(":")
+      const keyTo = _keyCfg[0].trim()
+      const keyFrom = (_keyCfg[1] || _keyCfg[0]).trim()
       let keyRet = keyTo
       if (cfg.lowerFirstKey) {
         keyRet = _.lowerFirst(keyRet)
@@ -244,7 +244,7 @@ let Data = {
 
   // 获取默认值
   def() {
-    for (let idx in arguments) {
+    for (const idx in arguments) {
       if (!_.isUndefined(arguments[idx])) {
         return arguments[idx]
       }
@@ -268,7 +268,7 @@ let Data = {
 
   regRet(reg, txt, idx) {
     if (reg && txt) {
-      let ret = reg.exec(txt)
+      const ret = reg.exec(txt)
       if (ret && ret[idx]) {
         return ret[idx]
       }
@@ -282,9 +282,9 @@ let Data = {
    * @param excludeDir
    */
   readDirRecursive(directory, extension, excludeDir) {
-    let files = fs.readdirSync(directory)
+    const files = fs.readdirSync(directory)
 
-    let jsFiles = files.filter(file => path.extname(file) === `.${extension}`)
+    const jsFiles = files.filter(file => path.extname(file) === `.${extension}`)
 
     files.filter(file => fs.statSync(path.join(directory, file)).isDirectory())
       .forEach(subdirectory => {

@@ -15,7 +15,7 @@ export const apiHandlers = [
   {
     reg: "白丝",
     fnc: async() => {
-      let link = (await request.get("https://v2.api-m.com/api/baisi", { responseType: "json" }))
+      const link = (await request.get("https://v2.api-m.com/api/baisi", { responseType: "json" }))
         .data
         .replace(/\\/g, "/")
       return [

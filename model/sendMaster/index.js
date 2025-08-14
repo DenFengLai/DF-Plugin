@@ -7,8 +7,9 @@ import common from "../../../../lib/common/common.js"
  * @param botUin
  */
 async function sendMasterMsg(msg, botUin = Bot.uin) {
+  // TODO 增加回调，返回发送成功与否 消息返回数值
   /** 获取配置信息 */
-  const Master = Config.sendMaster.Master
+  const { Master } = Config.sendMaster
   let masterQQ = Config.masterQQ
   /** 处理喵崽 */
   if (Config.master) {

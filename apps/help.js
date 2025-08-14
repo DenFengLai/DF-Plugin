@@ -20,15 +20,15 @@ export class help extends plugin {
 
   async help(e) {
     let custom = {}
-    let help = {}
+    const help = {}
 
-    let { diyCfg, sysCfg } = await Data.importCfg("help")
+    const { diyCfg, sysCfg } = await Data.importCfg("help")
 
     custom = help
 
-    let helpConfig = lodash.defaults(diyCfg.helpCfg || {}, custom.helpCfg, sysCfg.helpCfg)
-    let helpList = diyCfg.helpList || custom.helpList || sysCfg.helpList
-    let helpGroup = []
+    const helpConfig = lodash.defaults(diyCfg.helpCfg || {}, custom.helpCfg, sysCfg.helpCfg)
+    const helpList = diyCfg.helpList || custom.helpList || sysCfg.helpList
+    const helpGroup = []
 
     lodash.forEach(helpList, (group) => {
       if (group.auth && group.auth === "master" && !e.isMaster) {
@@ -36,19 +36,19 @@ export class help extends plugin {
       }
 
       lodash.forEach(group.list, (help) => {
-        let icon = help.icon * 1
+        const icon = help.icon * 1
         if (!icon) {
           help.css = "display:none"
         } else {
-          let x = (icon - 1) % 10
-          let y = (icon - x - 1) / 10
+          const x = (icon - 1) % 10
+          const y = (icon - x - 1) / 10
           help.css = `background-position:-${x * 50}px -${y * 50}px`
         }
       })
 
       helpGroup.push(group)
     })
-    let themeData = await Theme.getThemeData(diyCfg.helpCfg || {}, sysCfg.helpCfg || {})
+    const themeData = await Theme.getThemeData(diyCfg.helpCfg || {}, sysCfg.helpCfg || {})
 
     return await common.render("help/index", {
       helpCfg: helpConfig,

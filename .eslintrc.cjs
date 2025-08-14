@@ -23,7 +23,7 @@ module.exports = {
   },
   rules: {
     "eqeqeq": [ "off" ],
-    "prefer-const": [ "off" ],
+    // "prefer-const": [ "off" ],
     "arrow-body-style": "off",
     "camelcase": "off",
     "quotes": [ "error", "double" ],

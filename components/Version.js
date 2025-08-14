@@ -6,13 +6,13 @@ import { logger } from "#lib"
 const CHANGELOG_path = `${Plugin_Path}/CHANGELOG.md`
 const README_path = `${Plugin_Path}/README.md`
 
-let PluginPackagePath = `${Plugin_Path}/package.json`
-let PluginPackageData = JSON.parse(fs.readFileSync(PluginPackagePath, "utf8"))
-let packageJson = JSON.parse(fs.readFileSync(`${process.cwd()}/package.json`, "utf8"))
+const PluginPackagePath = `${Plugin_Path}/package.json`
+const PluginPackageData = JSON.parse(fs.readFileSync(PluginPackagePath, "utf8"))
+const packageJson = JSON.parse(fs.readFileSync(`${process.cwd()}/package.json`, "utf8"))
 
 // let yunzai_ver = packageJson.version
 
-let changelogs = []
+const changelogs = []
 let currentVersion
 let logs = {}
 let versionCount = 3
@@ -29,9 +29,9 @@ const getLine = function(line) {
 
 const readLogFile = function(root, versionCount = 4) {
   root = Data.getRoot(root)
-  let changelogs = []
+  const changelogs = []
   let currentVersion
-  let logPath = `${root}/CHANGELOG.md`
+  const logPath = `${root}/CHANGELOG.md`
   let logs = {}
 
   try {
@@ -45,9 +45,9 @@ const readLogFile = function(root, versionCount = 4) {
         if (versionCount <= -1) {
           return false
         }
-        let versionRet = /^#\s*([0-9a-zA-Z\\.~\s]+?)\s*$/.exec(line)
+        const versionRet = /^#\s*([0-9a-zA-Z\\.~\s]+?)\s*$/.exec(line)
         if (versionRet && versionRet[1]) {
-          let v = versionRet[1].trim()
+          const v = versionRet[1].trim()
           if (!currentVersion) {
             currentVersion = v
           } else {
@@ -95,9 +95,9 @@ try {
       if (versionCount < 1) {
         return false
       }
-      let versionRet = /^#\s*([0-9a-zA-Z\\.~\s]+?)\s*$/.exec(line.trim())
+      const versionRet = /^#\s*([0-9a-zA-Z\\.~\s]+?)\s*$/.exec(line.trim())
       if (versionRet && versionRet[1]) {
-        let v = versionRet[1].trim()
+        const v = versionRet[1].trim()
         if (!currentVersion) {
           currentVersion = v
         } else {
@@ -142,8 +142,8 @@ try {
 
 try {
   if (fs.existsSync(README_path)) {
-    let README = fs.readFileSync(README_path, "utf8") || ""
-    let reg = /版本：(.*)/.exec(README)
+    const README = fs.readFileSync(README_path, "utf8") || ""
+    const reg = /版本：(.*)/.exec(README)
     if (reg) {
       currentVersion = reg[1]
     }
@@ -162,7 +162,7 @@ try {
 //   console.error("读取或解析 package.json 出现错误:", error)
 // }
 
-let { author } = PluginPackageData
+const { author } = PluginPackageData
 const yunzaiVersion = packageJson.version
 const isV3 = yunzaiVersion[0] === "3"
 const isV4 = yunzaiVersion[0] === "4"
@@ -181,7 +181,7 @@ if (packageJson.name === "miao-yunzai") {
   isAlemonjs = true
 }
 
-let Version = {
+const Version = {
   isV3,
   isV4,
   isMiao,

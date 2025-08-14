@@ -18,11 +18,11 @@ export default new class {
    * @returns {Promise<object[]>} 提交数据或false（请求失败）
    */
   async getRepositoryData(repo, source, type = "commits", token, sha) {
-    let a = Config.CodeUpdate.repos.reduce((acc, item) => {
+    const a = Config.CodeUpdate.repos.reduce((acc, item) => {
       acc[item.provider] = item.ApiUrl
       return acc
     }, {})
-    let isGitHub = false, baseURL = a[source] || GitUrl[source]
+    const isGitHub = false, baseURL = a[source] || GitUrl[source]
 
     if (!baseURL) {
       logger.error(`未知数据源: ${source}`)
@@ -49,7 +49,7 @@ export default new class {
    * @returns {Promise<string|false>} 默认分支名或false（请求失败）
    */
   async getDefaultBranch(repo, source, token) {
-    let baseURL = GitUrl[source]
+    const baseURL = GitUrl[source]
 
     if (!baseURL) {
       logger.error(`未知数据源: ${source}`)

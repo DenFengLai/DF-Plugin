@@ -25,8 +25,8 @@ export class DFupdate extends plugin {
   }
 
   async update(e = this.e) {
-    let isLog = e.msg.includes("日志")
-    let Type = isLog ? "#更新日志" : (e.msg.includes("强制") ? "#强制更新" : "#更新")
+    const isLog = e.msg.includes("日志")
+    const Type = isLog ? "#更新日志" : (e.msg.includes("强制") ? "#强制更新" : "#更新")
     e.msg = Type + Plugin_Name
     const up = new Update(e)
     up.e = e
@@ -40,7 +40,7 @@ export class DFupdate extends plugin {
     lock = true
     try {
       if (fs.existsSync(Poke_Path)) {
-        let isForce = e.msg.includes("强制")
+        const isForce = e.msg.includes("强制")
         await e.reply(`开始${isForce ? "强制" : ""}更新图库啦，请主人稍安勿躁~`)
         await this.executeGitCommand(e, isForce)
       } else {

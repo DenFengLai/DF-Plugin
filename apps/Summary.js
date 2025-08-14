@@ -31,7 +31,7 @@ export class Summary extends plugin {
     if (!e.isMaster) return
     if (!Config.summary.sum) return e.reply("❎ 请先启用该功能！")
     if (Config.summary.type == 2) return e.reply("❎ 该功能在一言模式下不可用，请先关闭一言")
-    let sum = e.msg.replace(/^#设置外显/g, "").trim()
+    const sum = e.msg.replace(/^#设置外显/g, "").trim()
     if (!sum) return e.reply("请附带外显内容哦")
     Config.modify("summary", "text", sum)
     return e.reply("✅ 修改成功！")
