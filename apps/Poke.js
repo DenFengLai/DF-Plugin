@@ -72,6 +72,7 @@ export class DF_Poke extends plugin {
       if (_.isEmpty(textList)) return false
       const text = _.sample(textList)
       logger.debug(`${logger.blue("[ DF-Plugin ]")}${logger.green("[戳一戳]")} 获取自定义文本:`, text)
+      return text
     }
     return false
   }
