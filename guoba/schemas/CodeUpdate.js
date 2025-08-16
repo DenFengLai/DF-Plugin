@@ -159,6 +159,9 @@ export default [
                 },
                 rules: [
                   {
+                    pattern: "^[^\\s]*$", message: "请勿输入空格"
+                  },
+                  {
                     pattern: "^([\\w-]+)\\/([\\w.-]+)$",
                     message: "格式不正确，请使用 所有者/存储库 的格式"
                   },
