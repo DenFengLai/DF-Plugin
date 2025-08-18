@@ -19,7 +19,7 @@ export class Version_Info extends plugin {
     return await common.render("help/version-info", {
       currentVersion: Version.ver,
       changelogs: Version.logs
-    }, { e, scale: 1.4 }
+    }, { e, scale: 1.4, send: true }
     )
   }
 }

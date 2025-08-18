@@ -54,6 +54,6 @@ export class help extends plugin {
       helpCfg: helpConfig,
       helpGroup,
       ...themeData
-    }, { e, scale: 1.6 })
+    }, { e, scale: 1.6, send: true })
   }
 }
