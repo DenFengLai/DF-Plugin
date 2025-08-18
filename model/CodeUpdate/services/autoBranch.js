@@ -3,47 +3,45 @@ import { Config } from "#components"
 import { GitApi } from "../../api/index.js"
 import { AutoPathBranch } from "../constants.js"
 import { logger } from "#lib"
+import { getToken } from "../utils/index.js"
 
-export async function autoFillDefaultBranches() {
-  let num = 0
-  const promises = []
-  if (!Config.CodeUpdate.AutoBranch) return
-
-  for (const item of Config.CodeUpdate.List || []) {
-    for (const [ platform, token, listKey ] of [
-      [ "GitHub", Config.CodeUpdate.GithubToken, "GithubList" ],
-      [ "Gitee", Config.CodeUpdate.GiteeToken, "GiteeList" ],
-      [ "Gitcode", Config.CodeUpdate.GitcodeToken, "GitcodeList" ]
-    ]) {
-      const repoList = item[listKey] || []
-      for (let idx = 0; idx < repoList.length; idx++) {
-        const path = repoList[idx]
-        if (!path.split(":")?.[1]) {
-          const repo = path.split(":")[0]
-          promises.push(
-            GitApi.getDefaultBranch(repo, platform, token)
-              .then((branch) => {
-                if (!branch) throw new Error(`接口返回分支为空 ${branch}`)
-                if (branch === "return") return
-                AutoPathBranch[repo] = branch
-                item[listKey][idx] = `${repo}:${branch}`
-                num++
-              })
-              .catch((error) => {
-                logger.warn(`获取${platform}的默认分支失败 ${repo}: ${error.message}`)
-              })
-          )
-        }
-      }
-    }
-  }
+/**
+ * 检查并自动获取仓库默认分支
+ * @param {object} repoObj 配置对象
+ * @returns {boolean}
+ */
+async function fetchDefaultBranch(repoObj) {
+  const { provider, repo, branch, type } = repoObj
+  if (type !== "commit") return false
+  if (branch) return false
 
   try {
-    await Promise.all(promises)
-    if (num > 0) {
-      logger.info(`已自动获取到 ${logger.blue(num)} 个默认分支`)
-    }
+    const token = getToken(provider)
+    const defaultBranch = await GitApi.getDefaultBranch(repo, provider, token)
+
+    if (!defaultBranch) throw new Error(`接口返回分支为空 ${defaultBranch}`)
+    if (defaultBranch === "return") return false
+
+    AutoPathBranch[repo] = defaultBranch
+    repoObj.branch = defaultBranch
+    return true
   } catch (error) {
-    logger.error(`获取默认分支时发生错误: ${error.message}`)
+    logger.warn(`获取 ${provider} 的默认分支失败 ${repo}: ${error.message}`)
+    return false
+  }
+}
+
+/** 自动获取默认分支 */
+export async function autoFillDefaultBranches() {
+  if (!Config.CodeUpdate.AutoBranch) return
+
+  const allRepos = (Config.CodeUpdate.List || [])
+    .flatMap(item => item.repos || [])
+
+  const results = await Promise.all(allRepos.map(fetchDefaultBranch))
+  const num = results.filter(Boolean).length
+
+  if (num > 0) {
+    logger.info(`已自动获取到 ${logger.blue(num)} 个默认分支`)
   }
 }

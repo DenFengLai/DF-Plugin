@@ -53,7 +53,7 @@ export default new class {
 
     if (!baseURL) {
       logger.error(`未知数据源: ${source}`)
-      return false
+      return "return"
     }
 
     const url = `${baseURL}/${repo}`

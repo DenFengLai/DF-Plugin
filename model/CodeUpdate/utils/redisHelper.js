@@ -1,3 +1,5 @@
+import { redisKey } from "../constants.js"
+
 /**
  * 检查指定仓库是否为最新，通过比较提供的 SHA 与 Redis 中存储的 SHA。
  * @async
@@ -27,4 +29,19 @@ async function updatesSha(repo, redisKeyPrefix, sha, isAuto) {
   }
 }
 
-export default { isUpToDate, updatesSha }
+/**
+ * 获取单个仓库对应的 redis key
+ * @param {string} platform 平台名（如 github, gitee）
+ * @param {string} type 更新类型（commits 或 releases）
+ * @param {string} [repoPath] 仓库路径（可选），用来生成完整 key
+ * @returns {string} 返回 redis key
+ */
+async function getRedisKey(platform, type, repoPath = "") {
+  const prefix = type === "commits"
+    ? `${redisKey}:${platform}`
+    : `${redisKey}:${platform}${type[0].toUpperCase()}${type.slice(1)}`
+
+  return repoPath ? `${prefix}:${repoPath}` : prefix
+}
+
+export default { isUpToDate, updatesSha, getRedisKey }

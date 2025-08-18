@@ -5,9 +5,13 @@ import { fetchCommits, fetchReleases } from "./repo.js"
 import { sendMessageToUser } from "./message.js"
 import { generateScreenshot } from "./screenshot.js"
 import { logger } from "#lib"
+import { redisHeler } from "../utils/index.js"
 
 class UpdateService {
-  redisKey = redisKey
+  constructor() {
+    this.redisKey = redisKey
+  }
+
   /**
    * 检查所有配置仓库的更新情况
    * @param {boolean} [isAuto] 是否为自动触发的检查
@@ -68,7 +72,7 @@ class UpdateService {
         platform,
         token: tokens[platform],
         type,
-        key: this.getRedisKey(platform, type)
+        key: redisHeler.getRedisKey(platform, type)
       }))
     )
 
@@ -137,21 +141,6 @@ class UpdateService {
   }
 
   /**
-   * 获取单个仓库对应的 redis key
-   * @param {string} platform 平台名（如 github, gitee）
-   * @param {string} type 更新类型（commits 或 releases）
-   * @param {string} [repoPath] 仓库路径（可选），用来生成完整 key
-   * @returns {string} 返回 redis key
-   */
-  getRedisKey(platform, type, repoPath = "") {
-    const prefix = type === "commits"
-      ? `${redisKey}:${platform}`
-      : `${redisKey}:${platform}${type[0].toUpperCase()}${type.slice(1)}`
-
-    return repoPath ? `${prefix}:${repoPath}` : prefix
-  }
-
-  /**
    * 获取所有仓库的 redis key（去重）
    * @param fullKey 是否返回完整key
    * @returns {string[]} 返回所有 redis key 数组
@@ -167,15 +156,14 @@ class UpdateService {
         for (const [ type, repoPaths ] of Object.entries(types)) {
           if (fullKey) {
             for (const repoPath of repoPaths) {
-              keys.add(this.getRedisKey(platform, type, repoPath))
+              keys.add(redisHeler.getRedisKey(platform, type, repoPath))
             }
           } else {
-            keys.add(this.getRedisKey(platform, type))
+            keys.add(redisHeler.getRedisKey(platform, type))
           }
         }
       }
     }
-
     return [ ...keys ]
   }
 

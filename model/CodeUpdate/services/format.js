@@ -1,5 +1,5 @@
 import { marked } from "marked"
-import { timeAgo } from "../utils/timeUtil.js"
+import { timeAgo } from "../utils/index.js"
 import { Res_Path, Config } from "#components"
 import fs from "node:fs"
 import path from "node:path"

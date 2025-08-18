@@ -1,5 +1,5 @@
 import lodash from "lodash"
-import redisHeler from "../utils/redisHelper.js"
+import { redisHeler } from "../utils/index.js"
 import { formatCommitInfo, formatReleaseInfo } from "./format.js"
 import { GitApi } from "../../api/index.js"
 import { AutoPathBranch } from "../constants.js"
