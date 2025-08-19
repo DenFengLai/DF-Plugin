@@ -239,3 +239,8 @@ other:
   ysTips: |-
     原神关键词发图
   ys: true
+
+  renderScaleTips: |-
+    渲染精度
+    范围 50~200
+  renderScale: 100
