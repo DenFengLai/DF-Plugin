@@ -10,14 +10,9 @@ import { redisHeler } from "../utils/index.js"
 class UpdateService {
   constructor() {
     this.redisKey = redisKey
+    this.updatesMap = new Map()
   }
 
-  /**
-   * 检查所有配置仓库的更新情况
-   * @param {boolean} [isAuto] 是否为自动触发的检查
-   * @param {object} e 消息事件对象
-   * @returns {Promise<false | { number: number }>} 自动模式下返回 false 或更新数量对象
-   */
   async checkUpdates(isAuto = false, e) {
     const { List = [], repos = [] } = Config.CodeUpdate
     if (!List.length) {
@@ -27,82 +22,154 @@ class UpdateService {
 
     logger.mark(logger.blue("开始检查仓库更新"))
 
-    /** @type {Record<string, string>} */
     const tokens = Object.fromEntries(repos.map(({ provider, token }) => [ provider, token ]))
-    let totalUpdates = 0
 
-    for (const repoConfig of List) {
-      totalUpdates += await this.checkRepoConfigUpdates(repoConfig, tokens, isAuto, e)
+    await this.collectAllUpdates(List, tokens, isAuto)
+
+    let totalSent = 0
+    for (const cfg of List) {
+      const sent = await this.deliverUpdatesForConfig(cfg, isAuto, e)
+      totalSent += sent
     }
 
     logger.info(
-      totalUpdates > 0
-        ? logger.green(`共获取到 ${totalUpdates} 条数据~`)
-        : logger.yellow("没有获取到任何数据")
+      totalSent > 0
+        ? logger.green(`共推送 ${totalSent} 条更新`)
+        : logger.yellow("没有需要推送的更新")
     )
 
-    return { number: totalUpdates }
+    return { number: totalSent }
   }
 
-  /**
-   * 检查单个仓库配置中的所有仓库更新
-   * @param {object} repoConfig 仓库配置对象
-   * @param {boolean} [repoConfig.AutoPath] 是否自动获取路径
-   * @param {Array<{provider: string, repo: string, branch?: string, type: "commit" | "release"}>} [repoConfig.repos] 仓库信息列表
-   * @param {string[]} [repoConfig.Exclude] 排除的仓库路径
-   * @param {string[]} [repoConfig.Group] 群聊 ID 列表
-   * @param {string[]} [repoConfig.QQ] QQ 用户 ID 列表
-   * @param {Record<string, string>} tokens 各平台 token
-   * @param {boolean} isAuto 是否自动触发
-   * @param {object} e 消息事件对象
-   * @returns {Promise<number>} 返回获取到的更新条数
-   */
-  async checkRepoConfigUpdates(
-    { AutoPath = false, repos = [], Exclude = [], Group = [], QQ = [] },
-    tokens,
-    isAuto,
-    e
-  ) {
-    const repoList = this.buildRepoList(repos, AutoPath, Exclude)
+  async collectAllUpdates(configList, tokens, isAuto) {
+    this.updatesMap.clear()
 
-    /** @type {Array<{repos: string[], platform: string, token: string, type: string, key: string}>} */
-    const updateRequests = Object.entries(repoList).flatMap(([ platform, types ]) =>
-      Object.entries(types).map(([ type, repoPaths ]) => ({
-        repos: this.getRepoList(repoPaths, PluginPath?.[platform], Exclude, AutoPath),
-        platform,
-        token: tokens[platform],
-        type,
-        key: redisHeler.getRedisKey(platform, type)
-      }))
-    )
+    const groups = {}
 
-    const results = await Promise.all(
-      updateRequests
-        .filter(({ repos }) => repos.length > 0)
-        .map(({ repos, platform, token, type, key }) =>
-          this.fetchUpdateForRepo(repos, platform, token, type, key, isAuto)
-        )
-    )
-
-    const content = results.flat()
-
-    if (content.length > 0) {
-      const userId = isAuto ? "Auto" : e.user_id
-      const base64 = await generateScreenshot(content, userId)
-      sendMessageToUser(base64, content, Group, QQ, isAuto, e)
+    for (const { AutoPath = false, repos = [], Exclude = [] } of configList) {
+      const repoList = this.buildRepoList(repos, AutoPath, Exclude)
+      for (const [ platform, types ] of Object.entries(repoList)) {
+        groups[platform] ??= {}
+        for (const [ type, repoPaths ] of Object.entries(types)) {
+          groups[platform][type] ??= new Set()
+          for (const rp of repoPaths) groups[platform][type].add(rp)
+        }
+      }
     }
 
-    return content.length
+    for (const [ platform, types ] of Object.entries(groups)) {
+      for (const [ type, repoPathSet ] of Object.entries(types)) {
+        const repoPaths = [ ...repoPathSet ]
+        if (!repoPaths.length) continue
+
+        const token = tokens[platform]
+        const fetcher = type === "commits" ? fetchCommits : fetchReleases
+        const key = redisHeler.getRedisKey(platform, type)
+
+        try {
+          const results = await fetcher(repoPaths, platform, token, key, isAuto)
+          if (Array.isArray(results) && results.length > 0) {
+            for (const item of results) {
+              const name = item.name || {}
+              const source = name.source || platform
+              const isRelease = Boolean(name.tag) || type === "releases"
+              const typeKey = isRelease ? "releases" : "commit"
+              const repo = name.repo || item.repo || ""
+              const branch = name.branch || item.branch || ""
+              const mapKey = `${source}:${typeKey}:${repo}${branch ? `:${branch}` : ""}`
+
+              const existing = this.updatesMap.get(mapKey)
+              if (!existing) {
+                this.updatesMap.set(mapKey, [ item ])
+              } else {
+                existing.push(item)
+                this.updatesMap.set(mapKey, existing)
+              }
+            }
+          }
+        } catch (err) {
+          logger.error(`[CodeUpdate] 拉取 ${platform}/${type} 更新失败: ${err?.message || err}`)
+        }
+      }
+    }
   }
 
-  /**
-   * 根据手动配置或 AutoPath 构建仓库列表
-   * @param {Array<{provider: string, repo: string, branch?: string, type: "commit" | "release"}>} repos 仓库列表
-   * @param {boolean} autoPath 是否启用自动路径
-   * @param {string[]} exclude 排除的仓库路径
-   * @returns {Record<string, {commits?: string[], releases?: string[]}>} 返回按平台分组的仓库路径列表
-   */
-  buildRepoList(repos, autoPath, exclude) {
+  async deliverUpdatesForConfig({ AutoPath = false, repos = [], Exclude = [], Group = [], QQ = [] }, isAuto, e) {
+    const repoList = this.buildRepoList(repos, AutoPath, Exclude)
+
+    const keys = []
+    for (const [ platform, types ] of Object.entries(repoList)) {
+      for (const [ type, repoPaths ] of Object.entries(types)) {
+        for (const repoPath of repoPaths) {
+          const [ repo, branch ] = repoPath.split(":")
+          const typeKey = type === "commits" ? "commit" : "releases"
+          const mapKey = `${platform}:${typeKey}:${repo}${branch ? `:${branch}` : ""}`
+          keys.push(mapKey)
+        }
+      }
+    }
+
+    const content = []
+    const deliverMarkPairs = []
+    const groupSignature = (Group && Group.length) ? `group:${Group.join(",")}` : (QQ && QQ.length ? `qq:${QQ.join(",")}` : "group:default")
+
+    for (const key of keys) {
+      if (!this.updatesMap.has(key)) continue
+      const items = this.updatesMap.get(key) || []
+      for (const item of items) {
+        const updateId = this.getUpdateId(item)
+        const deliveredKey = this.makeDeliveredKey(key, groupSignature)
+
+        const already = await redisHeler.isUpToDate(deliveredKey, key, updateId)
+        if (already) {
+          continue
+        }
+
+        content.push(item)
+        deliverMarkPairs.push({ deliveredKey, updateId })
+      }
+    }
+
+    if (content.length === 0) return 0
+
+    const userId = isAuto ? "Auto" : (e && e.user_id) || "Unknown"
+    try {
+      const base64 = await generateScreenshot(content, userId)
+      await sendMessageToUser(base64, content, Group, QQ, isAuto, e)
+
+      for (const { deliveredKey, updateId } of deliverMarkPairs) {
+        try {
+          await redisHeler.updatesSha(deliveredKey, "", updateId, isAuto)
+        } catch (err) {
+          logger.warn(`[CodeUpdate] 写 delivered 标记失败: ${deliveredKey} -> ${updateId}`)
+        }
+      }
+
+      return content.length
+    } catch (err) {
+      logger.error(`[CodeUpdate] 推送失败: ${err?.message || err}`)
+      return 0
+    }
+  }
+
+  getUpdateId(item) {
+    if (!item) return ""
+    if (item.sha) return item.sha
+    if (item.tag) return item.tag
+    if (item.name && item.name.tag) return item.name.tag
+    if (item.id) return String(item.id)
+    try {
+      return JSON.stringify(item.name || item)
+    } catch {
+      return String(Date.now())
+    }
+  }
+
+  makeDeliveredKey(mapKey, groupSignature) {
+    return `${this.redisKey?.delivered ?? "codeupdate:delivered"}:${mapKey}:to:${groupSignature}`
+  }
+
+  buildRepoList(repos = [], autoPath = false, exclude = []) {
     let acc = {}
 
     if (repos.length > 0) {
@@ -127,60 +194,9 @@ class UpdateService {
     return acc
   }
 
-  /**
-   * 合并 repoPaths 与 pluginPath，并排除 exclude 中的路径
-   * @param {string[]} repoPaths 已有仓库路径
-   * @param {string[]} [pluginPath] 插件路径列表
-   * @param {string[]} exclude 排除的路径
-   * @param {boolean} autoPath 是否自动路径模式
-   * @returns {string[]} 返回合并后的仓库路径数组
-   */
-  getRepoList(repoPaths, pluginPath = [], exclude, autoPath) {
+  getRepoList(repoPaths = [], pluginPath = [], exclude = [], autoPath) {
     if (!autoPath) return repoPaths
     return [ ...new Set([ ...repoPaths, ...pluginPath ]) ].filter(path => !exclude.includes(path))
-  }
-
-  /**
-   * 获取所有仓库的 redis key（去重）
-   * @param fullKey 是否返回完整key
-   * @returns {string[]} 返回所有 redis key 数组
-   */
-  getAllRedisKeys(fullKey = false) {
-    const { List = [] } = Config.CodeUpdate
-    const keys = new Set()
-
-    for (const { AutoPath = false, repos = [] } of List) {
-      const repoList = this.buildRepoList(repos, AutoPath, [])
-
-      for (const [ platform, types ] of Object.entries(repoList)) {
-        for (const [ type, repoPaths ] of Object.entries(types)) {
-          if (fullKey) {
-            for (const repoPath of repoPaths) {
-              keys.add(redisHeler.getRedisKey(platform, type, repoPath))
-            }
-          } else {
-            keys.add(redisHeler.getRedisKey(platform, type))
-          }
-        }
-      }
-    }
-    return [ ...keys ]
-  }
-
-  /**
-   * 获取指定仓库的更新内容
-   * @param {string[]} repoPaths 仓库路径数组
-   * @param {string} platform 平台名（如 github, gitee）
-   * @param {string} token 平台 API token
-   * @param {string} type 更新类型（commits 或 releases）
-   * @param {string} key redis key
-   * @param {boolean} isAuto 是否自动模式
-   * @returns {Promise<object[]>} 返回更新内容数组
-   */
-  async fetchUpdateForRepo(repoPaths, platform, token, type, key, isAuto) {
-    if (!repoPaths.length) return []
-    const fetcher = type === "commits" ? fetchCommits : fetchReleases
-    return fetcher(repoPaths, platform, token, key, isAuto)
   }
 }
 

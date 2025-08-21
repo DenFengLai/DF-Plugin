@@ -36,7 +36,7 @@ async function updatesSha(repo, redisKeyPrefix, sha, isAuto) {
  * @param {string} [repoPath] 仓库路径（可选），用来生成完整 key
  * @returns {string} 返回 redis key
  */
-async function getRedisKey(platform, type, repoPath = "") {
+function getRedisKey(platform, type, repoPath = "") {
   const prefix = type === "commits"
     ? `${redisKey}:${platform}`
     : `${redisKey}:${platform}${type[0].toUpperCase()}${type.slice(1)}`
