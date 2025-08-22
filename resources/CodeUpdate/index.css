@@ -3,7 +3,6 @@
   src: url("../font/font.woff");
 }
 * {
-  margin: 0;
   font-family: "font";
   box-sizing: border-box;
   -webkit-user-select: none;
@@ -129,8 +128,6 @@ body {
   font-size: 12px;
   color: #C4C3C8;
   margin-top: 10px;
-  white-space: pre-wrap;
-  line-height: 10px;
 }
 .list .item .title .desc .head {
   font-size: 14px;
