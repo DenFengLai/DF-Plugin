@@ -40,7 +40,7 @@ export function formatCommitInfo(data, source, repo, branch) {
 export function formatMessage(message) {
   const msgMap = message.split("\n")
   msgMap[0] = "<span class='head'>" + msgMap[0] + "</span>"
-  return msgMap.join("\n")
+  return msgMap.join("<br>")
 }
 
 export function formatReleaseInfo(data, source, repo) {
