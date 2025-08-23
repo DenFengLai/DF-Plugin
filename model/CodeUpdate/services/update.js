@@ -76,11 +76,12 @@ class UpdateService {
       }))
     )
 
+    const cache = {}
     const results = await Promise.all(
       updateRequests
         .filter(({ repos }) => repos.length > 0)
         .map(({ repos, platform, token, type, key }) =>
-          this.fetchUpdateForRepo(repos, platform, token, type, key, isAuto)
+          this.fetchUpdateForRepo(repos, platform, token, type, key, isAuto, cache)
         )
     )
 
@@ -177,10 +178,10 @@ class UpdateService {
    * @param {boolean} isAuto 是否自动模式
    * @returns {Promise<object[]>} 返回更新内容数组
    */
-  async fetchUpdateForRepo(repoPaths, platform, token, type, key, isAuto) {
+  async fetchUpdateForRepo(repoPaths, platform, token, type, key, isAuto, cache) {
     if (!repoPaths.length) return []
     const fetcher = type === "commits" ? fetchCommits : fetchReleases
-    return fetcher(repoPaths, platform, token, key, isAuto)
+    return fetcher(repoPaths, platform, token, key, isAuto, cache)
   }
 }
 
