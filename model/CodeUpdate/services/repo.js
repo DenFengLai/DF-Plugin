@@ -43,7 +43,8 @@ async function fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAut
   const content = []
   await Promise.all(repoList.map(async(repo) => {
     if (!repo) return
-    if (cache?.[repo]) return content.push(cache[repo])
+    const key = `${type}|${repo}`
+    if (cache?.[key]) return content.push(cache[key])
     try {
       logger.debug(`请求 ${logger.magenta(source)} ${type}: ${logger.cyan(repo)}`)
       let [ path, branch ] = type === "commits" ? repo.split(":") : [ repo ]
@@ -73,7 +74,7 @@ async function fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAut
         ? formatCommitInfo(data[0], source, path, branch)
         : formatReleaseInfo(data[0], source, repo)
       content.push(info)
-      if (cache) cache[repo] = info
+      if (cache) cache[key] = info
     } catch (error) {
       logger.error(`获取 ${logger.magenta(source)} ${type} ${logger.cyan(repo)} 数据出错: ${error?.stack || error}`)
     }
