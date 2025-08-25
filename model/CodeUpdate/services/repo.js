@@ -14,8 +14,8 @@ import { logger } from "#lib"
  * @param {boolean} isAuto 是否为自动更新检查。
  * @returns {Promise<object[]>} 处理后的更新信息数组。
  */
-export const fetchCommits = (repoList, source, token, redisKeyPrefix, isAuto) =>
-  fetchUpdates(repoList, source, token, "commits", redisKeyPrefix, isAuto)
+export const fetchCommits = (repoList, source, token, redisKeyPrefix, isAuto, cache) =>
+  fetchUpdates(repoList, source, token, "commits", redisKeyPrefix, isAuto, cache)
 
 /**
  * 获取指定仓库列表的发行记录。
@@ -26,8 +26,8 @@ export const fetchCommits = (repoList, source, token, redisKeyPrefix, isAuto) =>
  * @param {boolean} isAuto 是否为自动更新检查。
  * @returns {Promise<object[]>} 处理后的更新信息数组。
  */
-export const fetchReleases = (repoList, source, token, redisKeyPrefix, isAuto) =>
-  fetchUpdates(repoList, source, token, "releases", redisKeyPrefix, isAuto)
+export const fetchReleases = (repoList, source, token, redisKeyPrefix, isAuto, cache) =>
+  fetchUpdates(repoList, source, token, "releases", redisKeyPrefix, isAuto, cache)
 
 /**
  * 从仓库列表中获取更新（提交或发布），并进行处理。
@@ -39,10 +39,12 @@ export const fetchReleases = (repoList, source, token, redisKeyPrefix, isAuto) =
  * @param {boolean} isAuto 是否为自动更新检查。
  * @returns {Promise<object[]>} 处理后的更新信息数组。
  */
-async function fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAuto) {
+async function fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAuto, cache) {
   const content = []
   await Promise.all(repoList.map(async(repo) => {
     if (!repo) return
+    const key = `${type}|${repo}`
+    if (cache?.[key]) return content.push(cache[key])
     try {
       logger.debug(`请求 ${logger.magenta(source)} ${type}: ${logger.cyan(repo)}`)
       let [ path, branch ] = type === "commits" ? repo.split(":") : [ repo ]
@@ -66,12 +68,13 @@ async function fetchUpdates(repoList, source, token, type, redisKeyPrefix, isAut
           return
         }
         logger.mark(`${logger.cyan(repo)} 检测到更新`)
-        await redisHeler.updatesSha(repo, redisKeyPrefix, id, isAuto)
+        await redisHeler.updatesSha(repo, redisKeyPrefix, id, isAuto, cache)
       }
       const info = type === "commits"
         ? formatCommitInfo(data[0], source, path, branch)
         : formatReleaseInfo(data[0], source, repo)
       content.push(info)
+      if (cache) cache[key] = info
     } catch (error) {
       logger.error(`获取 ${logger.magenta(source)} ${type} ${logger.cyan(repo)} 数据出错: ${error?.stack || error}`)
     }
