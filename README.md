@@ -108,7 +108,7 @@ pnpm install
 ## 贡献者
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#贡献者)
+[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些了不起的人 ([emoji-key](https://allcontributors.org/emoji-key/#natural-language-processing)):
@@ -119,18 +119,30 @@ pnpm install
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yeyang52"><img src="https://avatars.githubusercontent.com/u/107110851?v=4?s=100" width="100px;" alt="椰羊"/><br /><sub><b>椰羊</b></sub></a><br /><a href="#example-yeyang52" title="Examples">💡</a> <a href="https://github.com/DenFengLai/DF-Plugin/commits?author=yeyang52" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TimeRainStarSky"><img src="https://avatars.githubusercontent.com/u/63490117?v=4?s=100" width="100px;" alt="时雨◎星空"/><br /><sub><b>时雨◎星空</b></sub></a><br /><a href="#mentoring-TimeRainStarSky" title="Mentoring">🧑‍🏫</a> <a href="https://github.com/DenFengLai/DF-Plugin/commits?author=TimeRainStarSky" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qsyhh"><img src="https://avatars.githubusercontent.com/u/132750431?v=4?s=100" width="100px;" alt="其实雨很好"/><br /><sub><b>其实雨很好</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=qsyhh" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gitee.com/adrae"><img src="https://foruda.gitee.com/avatar/1706324987763497611/13205155_adrae_1706324987.png!avatar200?s=100" width="100px;" alt="Admilk"/><br /><sub><b>Admilk</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=Admilkk" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gitee.com/kesally"><img src="https://avatars.githubusercontent.com/u/110397533?v=4?s=100" width="100px;" alt="kesally"/><br /><sub><b>kesally</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=kesally" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gitee.com/shanhai233"><img src="https://foruda.gitee.com/avatar/1723727797498359874/8750220_shanhai233_1723727797.png!avatar200?s=100" width="100px;" alt="桃缘十三"/><br /><sub><b>桃缘十三</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=shanhai233" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hmexy"><img src="https://avatars.githubusercontent.com/u/112873708?v=4?s=100" width="100px;" alt="心愿XY"/><br /><sub><b>心愿XY</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=hmexy" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yeyang52"><img src="https://avatars.githubusercontent.com/u/107110851?v=4?s=100" width="100px;" alt="椰羊"/><br /><sub><b>椰羊</b></sub></a><br /><a href="#example-yeyang52" title="Examples">💡</a> <a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=yeyang52" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TimeRainStarSky"><img src="https://avatars.githubusercontent.com/u/63490117?v=4?s=100" width="100px;" alt="时雨◎星空"/><br /><sub><b>时雨◎星空</b></sub></a><br /><a href="#mentoring-TimeRainStarSky" title="Mentoring">🧑‍🏫</a> <a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=TimeRainStarSky" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qsyhh"><img src="https://avatars.githubusercontent.com/u/132750431?v=4?s=100" width="100px;" alt="其实雨很好"/><br /><sub><b>其实雨很好</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=qsyhh" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://gitee.com/adrae"><img src="https://foruda.gitee.com/avatar/1706324987763497611/13205155_adrae_1706324987.png!avatar200?s=100" width="100px;" alt="Admilk"/><br /><sub><b>Admilk</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=Admilkk" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://gitee.com/kesally"><img src="https://avatars.githubusercontent.com/u/110397533?v=4?s=100" width="100px;" alt="kesally"/><br /><sub><b>kesally</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=kesally" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://gitee.com/shanhai233"><img src="https://foruda.gitee.com/avatar/1723727797498359874/8750220_shanhai233_1723727797.png!avatar200?s=100" width="100px;" alt="桃缘十三"/><br /><sub><b>桃缘十三</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=shanhai233" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hmexy"><img src="https://avatars.githubusercontent.com/u/112873708?v=4?s=100" width="100px;" alt="心愿XY"/><br /><sub><b>心愿XY</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=hmexy" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lovely-02"><img src="https://avatars.githubusercontent.com/u/83761116?v=4?s=100" width="100px;" alt="02"/><br /><sub><b>02</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=Lovely-02" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MapleLeaf2007"><img src="https://avatars.githubusercontent.com/u/122816807?v=4?s=100" width="100px;" alt="MapleLeaf"/><br /><sub><b>MapleLeaf</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=MapleLeaf2007" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/GuGuNiu"><img src="https://avatars.githubusercontent.com/u/123828263?v=4?s=100" width="100px;" alt="MacacaTaurus"/><br /><sub><b>MacacaTaurus</b></sub></a><br /><a href="https://github.com/DenFengLai/DF-Plugin/commits?author=GuGuNiu" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lovely-02"><img src="https://avatars.githubusercontent.com/u/83761116?v=4?s=100" width="100px;" alt="02"/><br /><sub><b>02</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=Lovely-02" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MapleLeaf2007"><img src="https://avatars.githubusercontent.com/u/122816807?v=4?s=100" width="100px;" alt="MapleLeaf"/><br /><sub><b>MapleLeaf</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=MapleLeaf2007" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/GuGuNiu"><img src="https://avatars.githubusercontent.com/u/123828263?v=4?s=100" width="100px;" alt="MacacaTaurus"/><br /><sub><b>MacacaTaurus</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=GuGuNiu" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Leyanshi"><img src="https://avatars.githubusercontent.com/u/237535251?v=4?s=100" width="100px;" alt="Leyanshi"/><br /><sub><b>Leyanshi</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/commits?author=Leyanshi" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cchanlan"><img src="https://avatars.githubusercontent.com/u/128832869?v=4?s=100" width="100px;" alt="cchanlan"/><br /><sub><b>cchanlan</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3Acchanlan" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/devil233-ui"><img src="https://avatars.githubusercontent.com/u/69190444?v=4?s=100" width="100px;" alt="devil233"/><br /><sub><b>devil233</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3Adevil233-ui" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CSSZYF"><img src="https://avatars.githubusercontent.com/u/63802741?v=4?s=100" width="100px;" alt="CSSZYF"/><br /><sub><b>CSSZYF</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3ACSSZYF" title="Bug reports">🐛</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/xiowoku"><img src="https://avatars.githubusercontent.com/u/96910853?v=4?s=100" width="100px;" alt="xiowoku"/><br /><sub><b>xiowoku</b></sub></a><br /><a href="#ideas-xiowoku" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qsm-mz-hn"><img src="https://avatars.githubusercontent.com/u/108866283?v=4?s=100" width="100px;" alt="⁡ ⁡"/><br /><sub><b>⁡ ⁡</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3Aqsm-mz-hn" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/scaking4"><img src="https://avatars.githubusercontent.com/u/115682439?v=4?s=100" width="100px;" alt="scaking4"/><br /><sub><b>scaking4</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3Ascaking4" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/2078764727"><img src="https://avatars.githubusercontent.com/u/180080544?v=4?s=100" width="100px;" alt="2078764727"/><br /><sub><b>2078764727</b></sub></a><br /><a href="#ideas-2078764727" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://about.sakurax.top/"><img src="https://avatars.githubusercontent.com/u/106215893?v=4?s=100" width="100px;" alt="Sakura1618"/><br /><sub><b>Sakura1618</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3ASakura1618" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lilibsxz"><img src="https://avatars.githubusercontent.com/u/159024210?v=4?s=100" width="100px;" alt="濁"/><br /><sub><b>濁</b></sub></a><br /><a href="https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues?q=author%3Alilibsxz" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
@@ -141,6 +153,10 @@ pnpm install
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 本段遵循 [all-contributors](https://github.com/all-contributors/all-contributors) 规范，欢迎任何形式的贡献！
+
+## 问题反馈
+
+如果您在使用过程中遇到了Bug或有好的功能建议以及其他问题可以[加入交流群反馈](#加入交流群)或者创建一个[issues](https://github.com/KaguyaJs/Yunzai-DF-Plugin/issues/new/choose)。
 
 ## 加入交流群
 
